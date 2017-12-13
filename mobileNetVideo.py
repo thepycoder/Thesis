@@ -15,7 +15,7 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
 COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 cap = cv2.VideoCapture()
-vid = cap.open("../Footage/TestSeq1.mp4")
+vid = cap.open("../Footage/TestSeq4.mp4")
 frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
 # load our serialized model from disk
@@ -61,11 +61,10 @@ while True:
             y = startY - 15 if startY - 15 > 15 else startY + 15
             cv2.putText(frame, label, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
 
-
     # Display the resulting frame
-    # cv2.imshow('frame', frame)
-    # if cv2.waitKey(1) & 0xFF == ord('q'):
-    #     break
+    cv2.imshow('frame', frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
 
 end = time.time()
 print("[INFO] it took %s seconds." % (end - start))
