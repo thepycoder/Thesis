@@ -5,6 +5,7 @@ import time
 import cv2
 
 
+print("[INFO] loading model...")
 hog = cv2.HOGDescriptor()
 hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 
