@@ -10,7 +10,8 @@ hog = cv2.HOGDescriptor()
 hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 
 cap = cv2.VideoCapture()
-vid = cap.open("../Footage/TestSeq1.mp4")
+# vid = cap.open("../Footage/TestSeq1.mp4")
+vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq1.mp4")
 frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
 start = time.time()
@@ -36,9 +37,9 @@ while True:
         cv2.rectangle(frame, (xA, yA), (xB, yB), (0, 255, 0), 2)
 
     # Display the resulting frame
-    # cv2.imshow('frame', frame)
-    # if cv2.waitKey(1) & 0xFF == ord('q'):
-    #     break
+    cv2.imshow('frame', frame)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
 
 end = time.time()
 print("[INFO] it took %s seconds." % (end - start))

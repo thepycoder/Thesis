@@ -4,7 +4,7 @@ import cv2
 
 prototxt = "MobileNetSSD_deploy.prototxt"
 model = "MobileNetSSD_deploy.caffemodel"
-image = "Testimages/test15.png"
+image = "Testimages/test16.jpg"
 conf = 0.01
 
 

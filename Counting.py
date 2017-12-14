@@ -4,8 +4,11 @@ import cv2
 
 prototxt = "MobileNetSSD_deploy.prototxt"
 model = "MobileNetSSD_deploy.caffemodel"
-image = "Testimages/test15.png"
 conf = 0.1
+
+LOI = 0
+UP = 0
+DOWN = 0
 
 
 CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
@@ -64,6 +67,8 @@ while True:
             label = "{}: {:.2f}%".format(CLASSES[idx], confidence * 100)
             # print("[INFO] {}".format(label))
             cv2.rectangle(frame, (startX, startY), (endX, endY), COLORS[idx], 2)
+
+            # Put text with class name and confidence value
             y = startY - 15 if startY - 15 > 15 else startY + 15
             cv2.putText(frame, label, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
 
