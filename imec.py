@@ -1,22 +1,9 @@
-import sys
-
-sys.path.insert(0, r"C:\Program Files (x86)\Anaconda2\Lib\site-packages")
 import cv2
 import math
 import numpy as np
 import csv
 
-# check opencv version
-print(cv2.__version__)
-
-# copy ffmpeg dlls and change name (based on opencv version!!!)
-# https://li8bot.wordpress.com/2014/07/09/opencvpython-part-1-working-with-videos/
-# Go to : OpenCV\3rdparty\ffmpeg\
-# Copy the dll files opencv_ffmpeg.dll or opencv_ffmpeg_64.dll (depending on your system architecture) and paste them into C:\Python27\
-# Now rename both these to opencv_ffmpeg24x.dll or opencv_ffmpeg24x_64.dll where x is the version of opencv you are using. For example I am using OpenCV 2.4.6 so I renamed them
-# opencv_ffmpeg246.dll or opencv_ffmpeg246_64.dll.
-
-cap = cv2.VideoCapture("nederkouter.mp4")
+cap = cv2.VideoCapture("../Footage/TestSeq1.mp4")
 
 frameNumber = 0
 
@@ -27,14 +14,14 @@ frameSkip = 100
 frames = []
 
 for iM in range(MEDframes):
-    cap.set(cv2.cv.CV_CAP_PROP_POS_FRAMES, iM * frameSkip)
+    #cap.set(cv2.CV_CAP_PROP_POS_FRAMES, iM * frameSkip)
     ret, frame = cap.read()
     frame = cv2.resize(frame, (0, 0), fx=0.3, fy=0.3)
     # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     frames.append(frame)
 median = np.median(frames, axis=0).astype(dtype=np.uint8)
 
-cap.set(cv2.cv.CV_CAP_PROP_POS_FRAMES, 2000)
+#cap.set(cv2.CV_CAP_PROP_POS_FRAMES, 2000)
 
 # clipL = 100
 # gridSize = 8

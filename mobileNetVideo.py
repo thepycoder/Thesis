@@ -15,7 +15,7 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
 COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 cap = cv2.VideoCapture()
-vid = cap.open("../Footage/hard.mp4")
+vid = cap.open("../Footage/TestSeq1.mp4")
 # vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq1.mp4")
 frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
@@ -39,6 +39,7 @@ while True:
 
     (h, w) = frame.shape[:2]
     blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)), 0.007843, (300, 300), 127.5)
+    # blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)), 0.003, (300, 300), 127.5)
 
     # Our operations on the frame come here
     net.setInput(blob)
