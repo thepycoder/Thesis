@@ -1,12 +1,19 @@
+from scipy import spatial
 import numpy as np
 import time
 import cv2
 
 prototxt = "MobileNetSSD_deploy.prototxt"
 model = "MobileNetSSD_deploy.caffemodel"
-conf = 0.1
+conf = 0.5
+lineHeight = 360
 
-LOI = 0
+# initialise the counting line array
+C = np.array([[0, 0, 0, 0]])
+M = np.array([[0, 0]])
+Cold = C
+Mold = M
+
 UP = 0
 DOWN = 0
 
@@ -18,14 +25,11 @@ CLASSES = ["background", "aeroplane", "bicycle", "bird", "boat",
 COLORS = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
 cap = cv2.VideoCapture()
-# vid = cap.open("../Footage/TestSeq1.mp4")
-vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq1.mp4")
+vid = cap.open("../Footage/TestSeq7.mp4")
+# vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq1.mp4")
 frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
-ret, frame = cap.read()
-wFrame = frame.shape
-
-print(wFrame)
+# ret, frame = cap.read()
 
 # load our serialized model from disk
 print("[INFO] loading model...")
@@ -68,21 +72,61 @@ while True:
             # print("[INFO] {}".format(label))
             cv2.rectangle(frame, (startX, startY), (endX, endY), COLORS[idx], 2)
 
-            # Put text with class name and confidence value
+            # pass the detection through to the counting algo if the rectangle crosses the counting line
+            if startY < lineHeight < endY:
+                midX = (startX + endX) / 2
+                midY = (startY + endY) / 2
+                M = np.append(M, np.array([[midX, midY]]), axis=0)
+                C = np.append(C, np.array([[startX, startY, endX, endY]]), axis=0)
+
+            # put text with class name and confidence value
             y = startY - 15 if startY - 15 > 15 else startY + 15
             cv2.putText(frame, label, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[idx], 2)
 
+    # here we count the people using our algorithm
+    if C.shape[0] > Cold.shape[0]:
+        # new detection in counting line
+        # first find out which one they are
+        nrOfNewDets = C.shape[0] - Cold.shape[0]
+        # calculate pairwise distances
+        distances = spatial.distance.cdist(Mold, M)
+        distances = np.amin(distances, axis=0)
+        # determine the new detections by them having no previous point -> far from the old values
+        # furthest holds the indexes of the new detections
+        furthest = distances.argsort()[-nrOfNewDets:][::-1]
+
+        # now to determine the direction of the new detections
+        # we look at where the bbox crosses the counting line
+        # if it is on the lower half -> going down
+        # if it is on the upper half -> going up
+        for i in furthest:
+            # if LOI is between top and middle of bbox
+            if C[i, 1] < lineHeight < M[i, 1]:
+                UP += 1
+            else:
+                DOWN += 1
+
+    Cold = C
+    Mold = M
+    C = np.array([[0, 0, 0, 0]])
+    M = np.array([[0, 0]])
 
     # Display the resulting frame
-    cv2.line(frame, (0, 360), (1280, 360), (255, 255, 255))
+    cv2.line(frame, (0, lineHeight), (1280, lineHeight), (255, 255, 255))
+    cv2.putText(frame, "UP: %s" % UP, (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[15], 2)
+    cv2.putText(frame, "DOWN: %s" % DOWN, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.5, COLORS[15], 2)
     cv2.imshow('frame', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+
 
 end = time.time()
 print("[INFO] it took %s seconds." % (end - start))
 print("[INFO] clip has %s frames" % frameCount)
 print("[INFO] that makes %s fps" % (frameCount / (end - start)))
+
+print("[RESULT] the amount of people going up was: %s" % UP)
+print("[RESULT] the amount of people going down was: %s" % DOWN)
 
 # When everything done, release the capture
 cap.release()

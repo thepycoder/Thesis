@@ -1,15 +1,17 @@
-from __future__ import print_function
-from imutils.video import VideoStream
-import numpy as np
-import argparse
-import imutils
-import time
+################
+#
+#   fpsUtil.py is a quick tool to convert a high framerate video file to a very low framerate video
+#   for use in testing counting algorithms when applied to very low framerates as might be found in
+#   real life applications
+#
+################
+
+
 import cv2
 
 cap = cv2.VideoCapture()
-# vid = cap.open("../Footage/TestSeq1.mp4")
-vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq1.mp4")
-output = 'output.avi'
+vid = cap.open("../Footage/TestSeq4.mp4")
+# vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq1.mp4")
 fps = 24
 
 frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -17,30 +19,23 @@ frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
 i = 0
 fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-writer = None
-(h, w) = (None, None)
-zeros = None
 
-while True:
+# output filename, videowriter object, framse per second of out and dimensions of out
+out = cv2.VideoWriter('../Footage/TestSeq8.mp4', fourcc, 24.0, (1280, 720))
+
+while cap.isOpened():
     # Capture frame-by-frame
     ret, frame = cap.read()
 
     if not ret:
         break
 
-
     # check if the writer is None
-    if writer is None:
-        if i % 6 == 0:
-            outputFrame = frame
+    if i % 6 == 0:
+        outputFrame = frame
 
-    # store the image dimensions, initialzie the video writer,
-    #  and construct the zeros array
-    (h, w) = frame.shape[:2]
-    writer = cv2.VideoWriter(output, fourcc, fps, (w, h), True)
-
-    # write the output frame to file
-    writer.write(outputFrame)
+    # write to output file
+    out.write(outputFrame)
 
     i += 1
 

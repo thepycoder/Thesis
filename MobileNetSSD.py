@@ -37,6 +37,7 @@ detections = net.forward()
 end = time.time()
 print("It took %s seconds." % (end - start))
 
+
 # loop over the detections
 for i in np.arange(0, detections.shape[2]):
     # extract the confidence (i.e., probability) associated with the
