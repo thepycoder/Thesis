@@ -1,13 +1,18 @@
+from imutils.object_detection import non_max_suppression
 import numpy as np
 import time
 import cv2
 
 
-cap = cv2.VideoCapture('../Footage/TestSeq2.mp4')
-frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-fgbg = cv2.createBackgroundSubtractorMOG2(varThreshold=25, detectShadows=False)
+cap = cv2.VideoCapture()
+# cap = cv2.VideoCapture('../Footage/TestSeq2.mp4')
+vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq3.mp4")
 
-fgbg = cv2.bgsegm.createBackgroundSubtractorMOG()
+frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+fgbg = cv2.createBackgroundSubtractorMOG2(varThreshold=250, detectShadows=False)
+sizeThreshold = 10000
+
+#fgbg = cv2.bgsegm.createBackgroundSubtractorMOG()
 
 start = time.time()
 
@@ -17,17 +22,29 @@ while True:
     if not ret:
         break
 
-    im = frame.copy()
+    frame = cv2.resize(frame, (640, 480))
+    contourImage = frame.copy()
 
-    frame = fgbg.apply(frame)
+    contourImage = fgbg.apply(contourImage)
 
-    _, contours, hierarchy = cv2.findContours(frame, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    # cv2.threshold(contourImage, 127, 255, cv2.THRESH_BINARY)
+
+    _, contours, hierarchy = cv2.findContours(contourImage, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    # rects = np.array([[cv2.boundingRect(cnt)] for cnt in contours])
+    # test = np.array([[x, y, x + w, y + h] for [[x, y, w, h]] in rects])
+    # pick = non_max_suppression(rects, probs=None, overlapThresh=0.65)
+
+    # for [[x, y, w, h]] in rects:
+    #     if w*h > sizeThreshold:
+    #         cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
     for cnt in contours:
         x, y, w, h = cv2.boundingRect(cnt)
-        cv2.rectangle(im, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        if w * h > sizeThreshold:
+            cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
 
-    cv2.imshow('frame', im)
+    cv2.imshow('frame', contourImage)
     cv2.imshow('BGSub', frame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
