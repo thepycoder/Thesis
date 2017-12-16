@@ -10,8 +10,8 @@ hog = cv2.HOGDescriptor()
 hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 
 cap = cv2.VideoCapture()
-vid = cap.open("../Footage/hard.mp4")
-# vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq1.mp4")
+# vid = cap.open("../Footage/TestSeq1.mp4")
+vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq1.mp4")
 frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
 start = time.time()
@@ -24,7 +24,7 @@ while True:
         break
 
     frame = resize(frame, width=min(400, frame.shape[1]))
-    (rects, weights) = hog.detectMultiScale(frame, winStride=(4, 4), padding=(8, 8), scale=1.05)
+    (rects, weights) = hog.detectMultiScale(frame, winStride=(4, 4), padding=(32, 32), scale=1.2)
 
     # apply non-maxima suppression to the bounding boxes using a
     # fairly large overlap threshold to try to maintain overlapping
