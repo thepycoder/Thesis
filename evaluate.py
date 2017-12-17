@@ -44,4 +44,7 @@ for bbox1 in det_list:
     else:
         badDetections += 1
 
-print("The total detection accuracy was: %s" % ((goodDetections / (badDetections + goodDetections)) * 100))
+print("The amount of good detections was: %s" % goodDetections)
+print("The amount of missed detections was %s" % badDetections)
+print("The total amount of detections was: %s while the groundtruth had %s detections" % (goodDetections+badDetections, gt_list.__len__()))
+print("The total detection accuracy was: %s" % ((goodDetections / (gt_list.__len__())) * 100))

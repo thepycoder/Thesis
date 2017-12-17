@@ -36,7 +36,7 @@ start = time.time()
 
 ## Create empty dict to dump detections into so we can evaluate the performance
 
-f = open("results.csv", "w")
+f = open("Groundtruth/results.csv", "w")
 reader = csv.writer(f)
 frameNumber = 0
 
@@ -75,15 +75,15 @@ while True:
 
             # display the prediction
             label = "{:.2f}%".format(confidence * 100)
-            cv2.rectangle(frame, (startX, startY), (endX, endY), (102, 255, 0), 2)
+            cv2.rectangle(frame, (startX, startY), (endX, endY), (0, 255, 0), 2)
             y = startY - 15 if startY - 15 > 15 else startY + 15
-            cv2.putText(frame, label, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (102, 255, 0), 2)
+            cv2.putText(frame, label, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
 
             # add the detection to the csv file
             reader.writerow([frameNumber, startX, startY, endX, endY])
 
     # Display the resulting frame
-    cv2.line(frame, (0, 360), (1280, 360), (255, 255, 255))
+    cv2.line(frame, (0, 360), (1280, 360), (0, 0, 0), 2)
     cv2.imshow('frame', frame)
 
     # Wait for q key to be pressed to stop the program

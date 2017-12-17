@@ -3,6 +3,7 @@ from imutils import resize
 import numpy as np
 import time
 import cv2
+import csv
 
 
 print("[INFO] loading model...")
@@ -14,6 +15,12 @@ cap = cv2.VideoCapture()
 vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq1.mp4")
 frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
+## Create empty dict to dump detections into so we can evaluate the performance
+
+f = open("Groundtruth/resultsHog.csv", "w")
+reader = csv.writer(f)
+frameNumber = 0
+
 start = time.time()
 
 while True:
@@ -23,23 +30,36 @@ while True:
     if not ret:
         break
 
+    (ho, wo) = frame.shape[:2]
+    originalFrame = frame
+
     frame = resize(frame, width=min(400, frame.shape[1]))
-    (rects, weights) = hog.detectMultiScale(frame, winStride=(4, 4), padding=(32, 32), scale=1.2)
+    (hr, wr) = frame.shape[:2]
+
+    widthScale = wo / wr
+    heightScale = ho / hr
+
+    (rects, weights) = hog.detectMultiScale(frame, winStride=(4, 4), padding=(8, 8), scale=1.05)
 
     # apply non-maxima suppression to the bounding boxes using a
     # fairly large overlap threshold to try to maintain overlapping
     # boxes that are still people
-    rects = np.array([[x, y, x + w, y + h] for (x, y, w, h) in rects])
+    rects = np.array([[x, y, x + w, y + h] * np.array([widthScale, heightScale, widthScale, heightScale]) for (x, y, w, h) in rects])
     pick = non_max_suppression(rects, probs=None, overlapThresh=0.65)
 
     # draw the final bounding boxes
     for (xA, yA, xB, yB) in pick:
-        cv2.rectangle(frame, (xA, yA), (xB, yB), (0, 255, 0), 2)
+        # add the detection to the csv file
+        # reader.writerow([frameNumber, xA, yA, xB, yB])
+        cv2.rectangle(originalFrame, (xA, yA), (xB, yB), (0, 255, 0), 2)
 
     # Display the resulting frame
-    cv2.imshow('frame', frame)
+    cv2.imshow('frame', originalFrame)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+
+    # Finally update the framenumber, so the csv writer knows at which frame we are
+    frameNumber += 1
 
 end = time.time()
 print("[INFO] it took %s seconds." % (end - start))

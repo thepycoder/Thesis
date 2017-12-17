@@ -1,3 +1,40 @@
+import cv2
+import csv
+
+
+def evalutate(groundtruth, detections, threshhold):
+    gt = open(groundtruth)
+    gt = csv.reader(groundtruth)
+
+    gt_list = []
+
+    gooddetections = 0
+    baddetections = 0
+
+    for row in gt:
+        gt_list.append(row)
+
+    for bbox1 in detections:
+        highestIOU = 0
+        for bbox2 in gt_list:
+            if bbox1[0] == bbox2[0]:
+                v = iou.iou(bbox1, bbox2)
+                bbox1 = [int(x) for x in bbox1]
+                bbox2 = [int(x) for x in bbox2]
+                if v > highestIOU:
+                    highestIOU = v
+        if highestIOU > threshhold:
+            gooddetections += 1
+        else:
+            baddetections += 1
+
+    print("The amount of good detections was: %s" % gooddetections)
+    print("The amount of missed detections was %s" % baddetections)
+    print("The total amount of detections was: %s while the groundtruth had %s detections"
+          % (gooddetections + baddetections, gt_list.__len__()))
+    print("The total detection accuracy was: %s" % ((gooddetections / (gt_list.__len__())) * 100))
+
+
 def iou(bbox1, bbox2):
     """
     Calculates the intersection-over-union of two bounding boxes.
