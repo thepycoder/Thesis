@@ -9,7 +9,10 @@ import csv
 
 class HogDetector:
 
-    def __init__(self):
+    def __init__(self, winstride=(4, 4), padding=(8, 8), scale=1.05):
+        self.winstride = winstride
+        self.padding = padding
+        self.scale = scale
         self.hog = cv2.HOGDescriptor()
         self.hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
         self.detections = []
@@ -63,7 +66,7 @@ class HogDetector:
         for row in self.detections:
             reader.writerow(row)
 
-    def hogDetector(self, frame, frameNumber, winstride=(4, 4), padding=(8, 8), scale=1.05):
+    def hogDetector(self, frame, frameNumber):
         (ho, wo) = frame.shape[:2]
         originalFrame = frame
 
@@ -73,7 +76,7 @@ class HogDetector:
         widthScale = wo / wr
         heightScale = ho / hr
 
-        (rects, weights) = self.hog.detectMultiScale(frame, winStride=winstride, padding=padding, scale=scale)
+        (rects, weights) = self.hog.detectMultiScale(frame, winStride=self.winstride, padding=self.padding, scale=self.scale)
 
         # apply non-maxima suppression to the bounding boxes using a
         # fairly large overlap threshold to try to maintain overlapping
@@ -90,3 +93,12 @@ class HogDetector:
             cv2.rectangle(originalFrame, (xA, yA), (xB, yB), (0, 255, 0), 2)
 
         return originalFrame
+
+    def setWinStride(self, winstride):
+        self.winstride = winstride
+
+    def setPadding(self, padding):
+        self.padding = padding
+
+    def setScale(self, scale):
+        self.scale = scale

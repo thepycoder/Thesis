@@ -3,8 +3,8 @@ import csv
 
 
 def evalutate(groundtruth, detections, threshhold):
-    gt = open(groundtruth)
-    gt = csv.reader(groundtruth)
+    f = open(groundtruth)
+    gt = csv.reader(f)
 
     gt_list = []
 
@@ -12,15 +12,13 @@ def evalutate(groundtruth, detections, threshhold):
     baddetections = 0
 
     for row in gt:
-        gt_list.append(row)
+        gt_list.append([int(i) for i in row])
 
     for bbox1 in detections:
         highestIOU = 0
         for bbox2 in gt_list:
             if bbox1[0] == bbox2[0]:
-                v = iou.iou(bbox1, bbox2)
-                bbox1 = [int(x) for x in bbox1]
-                bbox2 = [int(x) for x in bbox2]
+                v = iou(bbox1, bbox2)
                 if v > highestIOU:
                     highestIOU = v
         if highestIOU > threshhold:
@@ -50,8 +48,8 @@ def iou(bbox1, bbox2):
     bbox1 = [float(x) for x in bbox1]
     bbox2 = [float(x) for x in bbox2]
 
-    (x0_1, y0_1, x1_1, y1_1) = bbox1
-    (x0_2, y0_2, x1_2, y1_2) = bbox2
+    (frameNr, x0_1, y0_1, x1_1, y1_1) = bbox1
+    (frameNr, x0_2, y0_2, x1_2, y1_2) = bbox2
 
     # get the overlap rectangle
     overlap_x0 = max(x0_1, x0_2)
