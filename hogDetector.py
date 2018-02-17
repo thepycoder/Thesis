@@ -24,6 +24,25 @@ class HogDetector:
         print("[INFO] Running evaluation...")
         utils.evalutate(groundtruth, self.detections, threshold)
 
+    def printSpeed(self, startTime, endTime, framecount):
+        print("[RESULT] it took %s seconds." % (endTime - startTime))
+        if framecount > 1:
+            print("[RESULT] clip has %s frames" % framecount)
+        print("[RESULT] that makes %s fps" % (framecount / (endTime - startTime)))
+
+    def detectImage(self, imagePath, showimage=True):
+        image = cv2.imread(imagePath)
+        image = resize(image, width=min(400, image.shape[1]))
+
+        start = time.time()
+        image = self.hogDetector(image)
+        end = time.time()
+
+        self.printSpeed(start, end, 1)
+
+        cv2.imshow("frame", image)
+        cv2.waitKey(0)
+
 
     def detectVideo(self, videoPath, showvideo=True):
         cap = cv2.VideoCapture()
@@ -52,9 +71,7 @@ class HogDetector:
             framenumber += 1
 
         end = time.time()
-        print("[RESULT] it took %s seconds." % (end - start))
-        print("[RESULT] clip has %s frames" % framecount)
-        print("[RESULT] that makes %s fps" % (framecount / (end - start)))
+
 
         # When everything done, release the capture
         cap.release()
