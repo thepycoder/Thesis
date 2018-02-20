@@ -29,13 +29,28 @@ class CountPeople:
                 break
 
             boxes = self.det.detect(frame, height, width)
-            I = self.tracker.track(boxes)
 
             # draw the final bounding boxes
             for (xA, yA, xB, yB) in boxes:
                 # add the detection to the csv file
                 self.detections.append([framenumber, xA, yA, xB, yB])
                 cv2.rectangle(frame, (xA, yA), (xB, yB), (0, 255, 0), 2)
+
+            tracks = self.tracker.track(boxes)
+
+            # Draw active tracks
+            for track in tracks:
+                # Start at first element so we can draw lines between current and previous element
+                previouselement = track[0]
+                for (xA, yA, xB, yB) in track[1:]:
+                    # cv2.rectangle(frame, (xA, yA), (xB, yB), (0, 0, 255), 2)
+                    oldCenter = (int((previouselement[2] + previouselement[0])/2),
+                                 int((previouselement[3] + previouselement[1])/2))
+                    newCenter = (int((xB + xA)/2), int((yB + yA)/2))
+                    previouselement = (xA, yA, xB, yB)
+                    cv2.line(frame, newCenter, oldCenter, (0, 0, 255))
+
+            print(boxes)
 
             # Display the resulting frame
             if showVideo:
@@ -61,4 +76,4 @@ if __name__ == '__main__':
                                               caffemodel="../MobileNetSSD_deploy.caffemodel")
     iou = IouTracker.IouTracker()
     det = CountPeople(net, iou)
-    det.countInVideo(vid, showVideo=False)
+    det.countInVideo(vid, showVideo=True)

@@ -11,24 +11,24 @@ class IouTracker:
             if len(newDetections) > 0:
                 best_match = max(newDetections, key=lambda x: self.iou(track[-1], x))
                 if self.iou(track[-1], best_match) >= self.threshold:
-                    print("track updated")
+                    # print("track updated")
                     track.append(best_match)
                     updated_tracks.append(track)
                     del newDetections[newDetections.index(best_match)]
 
             if len(updated_tracks) == 0 or track is not updated_tracks[-1]:
                 if len(track) >= self.mintracklength:
-                    print("track finished")
+                    # print("track finished")
                     self.tracks_finished.append(track)
 
         new_tracks = [[det] for det in newDetections]
         self.tracks_active = updated_tracks + new_tracks
 
-        print(len(self.tracks_active), len(self.tracks_finished))
+        # print(len(self.tracks_active), len(self.tracks_finished))
 
         #self.tracks_finished += [track for track in self.tracks_active if len(track) >= self.mintracklength]
 
-        return True
+        return self.tracks_active
 
     def iou(self, bbox1, bbox2):
         """
