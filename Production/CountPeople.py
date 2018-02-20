@@ -11,7 +11,7 @@ class CountPeople:
         self.tracker = tracker
         self.detections = []
 
-    def countInVideo(self, videoPath, showVideo = True):
+    def countInVideo(self, videoPath, showVideo = True, showSpeed = True):
         cap = cv2.VideoCapture()
         cap.open(videoPath)
         framecount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -48,9 +48,7 @@ class CountPeople:
                                  int((previouselement[3] + previouselement[1])/2))
                     newCenter = (int((xB + xA)/2), int((yB + yA)/2))
                     previouselement = (xA, yA, xB, yB)
-                    cv2.line(frame, newCenter, oldCenter, (0, 0, 255))
-
-            print(boxes)
+                    cv2.line(frame, newCenter, oldCenter, (0, 0, 255), 5)
 
             # Display the resulting frame
             if showVideo:
@@ -63,7 +61,13 @@ class CountPeople:
 
         end = time.time()
 
-        # When everything done, release the capture
+        # When everything done, release the capture and print speed
+
+        if showSpeed:
+            print("[INFO] it took %s seconds." % (end - start))
+            print("[INFO] clip has %s frames" % framecount)
+            print("[INFO] that makes %s fps" % (framecount / (end - start)))
+
         cap.release()
         cv2.destroyAllWindows()
 
@@ -75,5 +79,5 @@ if __name__ == '__main__':
     net = MobileNetDetector.MobileNetDetector(prototxt="../MobileNetSSD_deploy.prototxt",
                                               caffemodel="../MobileNetSSD_deploy.caffemodel")
     iou = IouTracker.IouTracker()
-    det = CountPeople(net, iou)
+    det = CountPeople(hog, iou)
     det.countInVideo(vid, showVideo=True)
