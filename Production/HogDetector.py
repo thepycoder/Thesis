@@ -1,4 +1,5 @@
 from imutils.object_detection import non_max_suppression
+from Production import Utils
 from imutils import resize
 import numpy as np
 import cv2
@@ -27,9 +28,9 @@ class HogDetector:
         # apply non-maxima suppression to the bounding boxes using a
         # fairly large overlap threshold to try to maintain overlapping
         # boxes that are still people
-        rects = np.array(
-            [[x, y, x + w, y + h] * np.array([widthScale, heightScale, widthScale, heightScale]) for (x, y, w, h) in
-             rects])
-        boxes = non_max_suppression(rects, probs=None, overlapThresh=0.65)
+        rects = np.array([[x, y, x + w, y + h] * np.array([widthScale, heightScale, widthScale, heightScale])
+                 for (x, y, w, h) in rects])
+        # boxes = non_max_suppression(rects, probs=None, overlapThresh=0.65)
+        boxes = Utils.non_max_suppression_fast(rects, overlapThresh=0.65)
 
         return boxes

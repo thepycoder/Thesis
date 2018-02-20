@@ -73,11 +73,11 @@ class CountPeople:
 
 
 if __name__ == '__main__':
-    vid = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq1.mp4"
+    vid = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeqFPS.mp4"
 
     hog = HogDetector.HogDetector()
     net = MobileNetDetector.MobileNetDetector(prototxt="../MobileNetSSD_deploy.prototxt",
                                               caffemodel="../MobileNetSSD_deploy.caffemodel")
     iou = IouTracker.IouTracker()
-    det = CountPeople(hog, iou)
+    det = CountPeople(net, iou)
     det.countInVideo(vid, showVideo=True)
