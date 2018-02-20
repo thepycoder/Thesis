@@ -19,11 +19,14 @@ class HogDetector:
 
     def evaluateHog(self, videopath, groundtruth, threshold=0.5):
         print("[INFO] Running detector...")
-        self.detectVideo(videopath, False)
+        fps = self.detectVideo(videopath, False)
+        print("[RESULT] Speed was %s fps" % fps)
         print("[INFO] Detection Done!")
         print("[INFO] Running evaluation...")
-        utils.evalutate(groundtruth, self.detections, threshold)
+        good, bad, total = utils.evalutate(groundtruth, self.detections, threshold)
+        print("[INFO] The total detection accuracy was: %s" % ((good / total) * 100))
 
+        return fps, good/total
 
     def detectVideo(self, videoPath, showvideo=True):
         cap = cv2.VideoCapture()
@@ -52,13 +55,15 @@ class HogDetector:
             framenumber += 1
 
         end = time.time()
-        print("[RESULT] it took %s seconds." % (end - start))
-        print("[RESULT] clip has %s frames" % framecount)
-        print("[RESULT] that makes %s fps" % (framecount / (end - start)))
+        # print("[RESULT] it took %s seconds." % (end - start))
+        # print("[RESULT] clip has %s frames" % framecount)
+        # print("[RESULT] that makes %s fps" % (framecount / (end - start)))
 
         # When everything done, release the capture
         cap.release()
         cv2.destroyAllWindows()
+
+        return framecount / (end - start)
 
     def writeDetectionsToFile(self, filename):
         f = open(filename, "w")
@@ -93,12 +98,3 @@ class HogDetector:
             cv2.rectangle(originalFrame, (xA, yA), (xB, yB), (0, 255, 0), 2)
 
         return originalFrame
-
-    def setWinStride(self, winstride):
-        self.winstride = winstride
-
-    def setPadding(self, padding):
-        self.padding = padding
-
-    def setScale(self, scale):
-        self.scale = scale

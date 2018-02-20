@@ -26,11 +26,13 @@ def evalutate(groundtruth, detections, threshhold):
         else:
             baddetections += 1
 
-    print("The amount of good detections was: %s" % gooddetections)
-    print("The amount of missed detections was %s" % baddetections)
-    print("The total amount of detections was: %s while the groundtruth had %s detections"
-          % (gooddetections + baddetections, gt_list.__len__()))
-    print("The total detection accuracy was: %s" % ((gooddetections / (gt_list.__len__())) * 100))
+    # print("The amount of good detections was: %s" % gooddetections)
+    # print("The amount of missed detections was %s" % baddetections)
+    # print("The total amount of detections was: %s while the groundtruth had %s detections"
+    #       % (gooddetections + baddetections, gt_list.__len__()))
+    # print("The total detection accuracy was: %s" % ((gooddetections / (gt_list.__len__())) * 100))
+
+    return gooddetections, baddetections, len(gt_list)
 
 
 def iou(bbox1, bbox2):
