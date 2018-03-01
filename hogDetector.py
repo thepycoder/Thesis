@@ -19,14 +19,30 @@ class HogDetector:
 
     def evaluateHog(self, videopath, groundtruth, threshold=0.5):
         print("[INFO] Running detector...")
-        fps = self.detectVideo(videopath, False)
-        print("[RESULT] Speed was %s fps" % fps)
+        self.detectVideo(videopath, False)
         print("[INFO] Detection Done!")
         print("[INFO] Running evaluation...")
-        good, bad, total = utils.evalutate(groundtruth, self.detections, threshold)
-        print("[INFO] The total detection accuracy was: %s" % ((good / total) * 100))
+        utils.evalutate(groundtruth, self.detections, threshold)
 
-        return fps, good/total
+    def printSpeed(self, startTime, endTime, framecount):
+        print("[RESULT] it took %s seconds." % (endTime - startTime))
+        if framecount > 1:
+            print("[RESULT] clip has %s frames" % framecount)
+        print("[RESULT] that makes %s fps" % (framecount / (endTime - startTime)))
+
+    def detectImage(self, imagePath, showimage=True):
+        image = cv2.imread(imagePath)
+        image = resize(image, width=min(400, image.shape[1]))
+
+        start = time.time()
+        image = self.hogDetector(image)
+        end = time.time()
+
+        self.printSpeed(start, end, 1)
+
+        cv2.imshow("frame", image)
+        cv2.waitKey(0)
+
 
     def detectVideo(self, videoPath, showvideo=True):
         cap = cv2.VideoCapture()
@@ -55,15 +71,11 @@ class HogDetector:
             framenumber += 1
 
         end = time.time()
-        # print("[RESULT] it took %s seconds." % (end - start))
-        # print("[RESULT] clip has %s frames" % framecount)
-        # print("[RESULT] that makes %s fps" % (framecount / (end - start)))
+
 
         # When everything done, release the capture
         cap.release()
         cv2.destroyAllWindows()
-
-        return framecount / (end - start)
 
     def writeDetectionsToFile(self, filename):
         f = open(filename, "w")
@@ -98,3 +110,12 @@ class HogDetector:
             cv2.rectangle(originalFrame, (xA, yA), (xB, yB), (0, 255, 0), 2)
 
         return originalFrame
+
+    def setWinStride(self, winstride):
+        self.winstride = winstride
+
+    def setPadding(self, padding):
+        self.padding = padding
+
+    def setScale(self, scale):
+        self.scale = scale
