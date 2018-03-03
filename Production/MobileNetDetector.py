@@ -29,7 +29,9 @@ class MobileNetDetector:
             # filter out weak detections by ensuring the `confidence` is greater than the minimum confidence
             if confidence > self.conf:
                 # Compute the (x, y)-coordinates of the bounding box for the object
-                box = detections[0, 0, i, 3:7] * np.array([width, height, width, height])
-                boxes.append(box.astype("int"))
+                # box = detections[0, 0, i, 3:7] * np.array([width, height, width, height])
+                box = detections[0, 0, i, 3:7] * [width, height, width, height]
+                # boxes.append(box.astype("int"))
+                boxes.append(list(map(int, box)))
 
         return boxes

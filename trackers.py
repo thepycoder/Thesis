@@ -5,7 +5,7 @@ import sys
 # Instead of MIL, you can also use
 
 tracker_types = ['BOOSTING', 'MIL', 'KCF', 'TLD', 'MEDIANFLOW', 'GOTURN']
-tracker_type = tracker_types[5]
+tracker_type = tracker_types[4]
 
 if tracker_type == 'BOOSTING':
     tracker = cv2.TrackerBoosting_create()
@@ -21,7 +21,9 @@ if tracker_type == 'GOTURN':
     tracker = cv2.TrackerGOTURN_create()
 
 # Read video
-video = cv2.VideoCapture("../Footage/TestSeq1.mp4")
+# video = cv2.VideoCapture("../Footage/TestSeq1.mp4")
+
+video = cv2.VideoCapture("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq2.mp4")
 
 # Exit if video not opened.
 if not video.isOpened():
@@ -36,6 +38,9 @@ if not ok:
 
 # Define an initial bounding box
 bbox = (287, 23, 86, 320)
+
+for i in range(1, 150):
+    ret, frame = video.read()
 
 # Uncomment the line below to select a different bounding box
 bbox = cv2.selectROI(frame, False)

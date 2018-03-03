@@ -1,34 +1,44 @@
 class IouTracker:
-    def __init__(self):
+    def __init__(self, treshold=0.5):
         self.tracks_active = []
         self.tracks_finished = []
-        self.mintracklength = 3
-        self.threshold = 0.5
+        self.mintracklength = 5
+        self.threshold = treshold
 
-    def track(self, newDetections):
+    def track(self, newDetections, countingline):
         updated_tracks = []
+        UP = 0
+        DOWN = 0
         for track in self.tracks_active:
             if len(newDetections) > 0:
-                best_match = max(newDetections, key=lambda x: self.iou(track[-1], x))
-                if self.iou(track[-1], best_match) >= self.threshold:
+                bestmatch = max(newDetections, key=lambda x: self.iou(track[-1], x))
+                if self.iou(track[-1], bestmatch) >= self.threshold:
                     # print("track updated")
-                    track.append(best_match)
+                    track.append(bestmatch)
                     updated_tracks.append(track)
-                    del newDetections[newDetections.index(best_match)]
+                    del newDetections[newDetections.index(bestmatch)]
 
             if len(updated_tracks) == 0 or track is not updated_tracks[-1]:
                 if len(track) >= self.mintracklength:
                     # print("track finished")
+                    f = track[0]
+                    l = track[-1]
+                    startCenter = (((f[0] + f[2]) / 2), ((f[1] + f[3]) / 2))
+                    endCenter = (((l[0] + l[2]) / 2), ((l[1] + l[3]) / 2))
+
+                    if startCenter[1] < countingline < endCenter[1]:
+                        # Person walked from top to bottom
+                        DOWN += 1
+
+                    if startCenter[1] > countingline > endCenter[1]:
+                        # Person walked from bottom to top
+                        UP += 1
                     self.tracks_finished.append(track)
 
         new_tracks = [[det] for det in newDetections]
         self.tracks_active = updated_tracks + new_tracks
 
-        # print(len(self.tracks_active), len(self.tracks_finished))
-
-        #self.tracks_finished += [track for track in self.tracks_active if len(track) >= self.mintracklength]
-
-        return self.tracks_active
+        return self.tracks_active, self.tracks_finished, UP, DOWN
 
     def iou(self, bbox1, bbox2):
         """

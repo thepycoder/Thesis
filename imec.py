@@ -21,7 +21,7 @@ for iM in range(MEDframes):
     frames.append(frame)
 median = np.median(frames, axis=0).astype(dtype=np.uint8)
 
-#cap.set(cv2.CV_CAP_PROP_POS_FRAMES, 2000)
+# cap.set(cv2.CV_CAP_PROP_POS_FRAMES, 2000)
 
 # clipL = 100
 # gridSize = 8
