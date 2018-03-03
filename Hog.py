@@ -5,11 +5,19 @@ import time
 import cv2
 
 
-image = "Testimages/test7.png"
+image = "Testimages/test1.jpg"
 
 hog = cv2.HOGDescriptor()
-hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+# hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+# svm = cv2.ml.SVM_load("/home/victor/Projects/trainHOG/genfiles/descriptorvector.dat")
+# sv = svm.getSupportVectors()
+# rho, alpha, svidx = svm.getDecisionFunction(0)
+# svm = cv2.ml.SVM_create()
+hog.load("/home/victor/Projects/trainHOG/genfiles/cvHOGClassifier.yaml")
 
+# print(svm)
+#
+# hog.setSVMDetector(svm)
 
 # load the image and resize it to (1) reduce detection time
 # and (2) improve detection accuracy

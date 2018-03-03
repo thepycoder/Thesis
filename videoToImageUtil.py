@@ -10,7 +10,8 @@ import cv2
 
 
 cap = cv2.VideoCapture()
-vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq1.mp4")
+# vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq1.mp4")
+vid = cap.open("../Footage/TestSeq2.mp4")
 
 filename = 0
 
@@ -21,6 +22,7 @@ while True:
     if not ret:
         break
 
-    cv2.imwrite("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq1/%s.jpg" % filename, frame)
+    # cv2.imwrite("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq1/%s.jpg" % filename, frame)
+    cv2.imwrite("../Footage/TestSeq2/%s.jpg" % filename, frame)
 
     filename += 1
