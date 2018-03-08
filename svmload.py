@@ -3,17 +3,20 @@ from imutils import resize
 import numpy as np
 import cv2
 
-svm = cv2.ml.SVM_load("svm_data.dat")
+svm = cv2.ml.SVM_load("300iter.dat")
 sv = svm.getSupportVectors()
 retval, alpha, svidx = svm.getDecisionFunction(0)
 
-print(sv, sv.shape)
-print(retval, alpha, svidx)
+print("C:", svm.getC(),
+      "Gamma: ", svm.getGamma(),
+      "P: ", svm.getP(),
+      "NU: ", svm.getNu(),
+      "Coef0: ", svm.getCoef0(),
+      "Degree: ", svm.getDegree())
 
 detector = np.append(sv, retval)
-print(detector)
 
-image = "Testimages/test1.jpg"
+image = "Testimages/test9.png"
 hog = cv2.HOGDescriptor()
 hog.setSVMDetector(detector)
 

@@ -5,7 +5,7 @@ import os
 negative_path = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/INRIA/INRIAPerson/train_64x128_H96/neg/"
 output_path = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/INRIA/Testing/neg/"
 
-for i in os.listdir(negative_path)[1:301]:
+for i in os.listdir(negative_path)[1:1001]:
     image = cv2.imread(negative_path + i)
     w = image.shape[1]
     h = image.shape[0]
