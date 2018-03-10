@@ -8,11 +8,17 @@ import csv
 
 print("[INFO] loading model...")
 hog = cv2.HOGDescriptor()
-hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+# hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+
+svm = cv2.ml.SVM_load("ALL.dat")
+sv = svm.getSupportVectors()
+
+detector = np.vstack(sv[0])
+hog.setSVMDetector(detector)
 
 cap = cv2.VideoCapture()
-# vid = cap.open("../Footage/TestSeq1.mp4")
-vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq1.mp4")
+vid = cap.open("../Footage/TestSeq1.mp4")
+# vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq1.mp4")
 frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
 ## Create empty dict to dump detections into so we can evaluate the performance

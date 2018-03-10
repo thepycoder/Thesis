@@ -27,7 +27,7 @@ orig = image.copy()
 
 # detect people in the image
 start = time.time()
-(rects, weights) = hog.detectMultiScale(image, winStride=(4, 4), padding=(8, 8), scale=1.05)
+(rects, weights) = hog.detectMultiScale(image, winStride=(4, 4), padding=(8, 8), scale=1.5)
 end = time.time()
 print("It took %s seconds." % (end - start))
 

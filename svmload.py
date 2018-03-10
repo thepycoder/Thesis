@@ -3,18 +3,27 @@ from imutils import resize
 import numpy as np
 import cv2
 
-svm = cv2.ml.SVM_load("svm_data.dat")
-sv = svm.getSupportVectors()
-retval, alpha, svidx = svm.getDecisionFunction(0)
+# svm = cv2.ml.SVM_load("ALL.dat")
+# sv = svm.getSupportVectors()
+# retval, alpha, svidx = svm.getDecisionFunction(0)
+#
+# detector = np.vstack(sv[0])
+# for i in sv[0]:
+#     detector = np.append(detector, np.array([i]))
 
-print(sv, sv.shape)
-print(retval, alpha, svidx)
+# detector = np.append(detector, np.array([0]))
+# print(detector, detector[0], type(detector[0]))
 
-detector = np.append(sv, retval)
-print(detector)
+# detector = sv
+
+detector = np.loadtxt("SVMs/50-50.dat")
+# print(detector, detector.shape)
 
 image = "Testimages/test1.jpg"
 hog = cv2.HOGDescriptor()
+# detector = hog.getDefaultPeopleDetector()
+print(detector, detector[0], type(detector[0]))
+# detector = detector[:-1]
 hog.setSVMDetector(detector)
 
 image = cv2.imread(image)
