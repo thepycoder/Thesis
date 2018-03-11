@@ -10,10 +10,11 @@ print("[INFO] loading model...")
 hog = cv2.HOGDescriptor()
 # hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
 
-svm = cv2.ml.SVM_load("ALL.dat")
-sv = svm.getSupportVectors()
+# svm = cv2.ml.SVM_load("ALL.dat")
+# sv = svm.getSupportVectors()
 
-detector = np.vstack(sv[0])
+# detector = np.vstack(sv[0])
+detector = np.loadtxt("SVMs/50-50.dat")
 hog.setSVMDetector(detector)
 
 cap = cv2.VideoCapture()

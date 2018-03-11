@@ -3,7 +3,7 @@ from imutils import resize
 import numpy as np
 import cv2
 
-# svm = cv2.ml.SVM_load("ALL.dat")
+# svm = cv2.ml.SVM_load("SVMs/person.svm")
 # sv = svm.getSupportVectors()
 # retval, alpha, svidx = svm.getDecisionFunction(0)
 #
@@ -19,7 +19,7 @@ import cv2
 detector = np.loadtxt("SVMs/50-50.dat")
 # print(detector, detector.shape)
 
-image = "Testimages/test1.jpg"
+image = "Testimages/test8.png"
 hog = cv2.HOGDescriptor()
 # detector = hog.getDefaultPeopleDetector()
 print(detector, detector[0], type(detector[0]))
