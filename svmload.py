@@ -16,13 +16,13 @@ print("C:", svm.getC(),
 
 detector = np.append(sv, retval)
 
-image = "Testimages/test9.png"
+image = "Testimages/test1.jpg"
 hog = cv2.HOGDescriptor()
 hog.setSVMDetector(detector)
 
 image = cv2.imread(image)
-image = resize(image, width=min(400, image.shape[1]))
-(rects, weights) = hog.detectMultiScale(image, winStride=(4, 4), padding=(8, 8), scale=1.05)
+image = resize(image, height=min(200, image.shape[1]))
+(rects, weights) = hog.detectMultiScale(image, winStride=(4, 4), padding=(8, 8), scale=1)
 
 rects = np.array([[x, y, x + w, y + h] for (x, y, w, h) in rects])
 pick = non_max_suppression(rects, probs=None, overlapThresh=0.65)
