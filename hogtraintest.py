@@ -11,8 +11,10 @@ labels = []
 # positive_path = "/home/victor/Projects/COCO/trainPOS/"
 # negative_path = "/home/victor/Projects/COCO/trainNEG/"
 
-positive_path = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/INRIA/Testing/pos/"
-negative_path = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/INRIA/Testing/neg/"
+# positive_path = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/INRIA/Testing/pos/"
+# negative_path = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/INRIA/Testing/neg/"
+positive_path = "/home/victor/Projects/INRIAPerson/NEWTRAINING/pos/"
+negative_path = "/home/victor/Projects/INRIAPerson/NEWTRAINING/neg/"
 
 print("Processing positive samples")
 # Get positive samples
@@ -47,14 +49,15 @@ svm = cv2.ml.SVM_create()
 svm.setType(cv2.ml.SVM_C_SVC)
 svm.setKernel(cv2.ml.SVM_LINEAR) # cv2.ml.SVM_LINEAR
 # svm.setDegree(0.0)
-# svm.setGamma(5.383)
+svm.setGamma(1)
 # svm.setCoef0(0.0)
-# svm.setC(2.67)
+svm.setC(0.5)
 # svm.setNu(0.0)
 # svm.setP(0.0)
 # svm.setClassWeights(None)
 
 # Train
-svm.trainAuto(samples, cv2.ml.ROW_SAMPLE, labels)
-svm.save('svm_data.dat')
+# svm.trainAuto(samples, cv2.ml.ROW_SAMPLE, labels)
+svm.train(samples, cv2.ml.ROW_SAMPLE, labels)
+svm.save('ALL.dat')
 print("Done!")
