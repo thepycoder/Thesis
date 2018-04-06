@@ -19,7 +19,7 @@ import cv2
 detector = np.loadtxt("SVMs/50-50.dat")
 # print(detector, detector.shape)
 
-image = "Testimages/test8.png"
+image = "/home/victor/Projects/INRIAPerson/Train/pos/person_and_bike_125.png"
 hog = cv2.HOGDescriptor()
 # detector = hog.getDefaultPeopleDetector()
 print(detector, detector[0], type(detector[0]))
