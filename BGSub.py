@@ -5,11 +5,11 @@ import cv2
 
 
 cap = cv2.VideoCapture()
-cap = cv2.VideoCapture('../Footage/TestSeq2.mp4')
-# vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq2.mp4")
+# cap = cv2.VideoCapture('../Footage/TestSeq2.mp4')
+vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:08:16.887.mp4")
 
 frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-fgbg = cv2.createBackgroundSubtractorMOG2(varThreshold=50, detectShadows=False)
+fgbg = cv2.createBackgroundSubtractorMOG2(varThreshold=50, detectShadows=True)
 sizeThreshold = 10000
 
 #fgbg = cv2.bgsegm.createBackgroundSubtractorMOG()
@@ -27,9 +27,9 @@ while True:
 
     contourImage = fgbg.apply(contourImage)
 
-    # cv2.threshold(contourImage, 127, 255, cv2.THRESH_BINARY)
+    th, dst = cv2.threshold(contourImage, 127, 255, cv2.THRESH_BINARY)
 
-    _, contours, hierarchy = cv2.findContours(contourImage, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    _, contours, hierarchy = cv2.findContours(dst, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 
     # rects = np.array([[cv2.boundingRect(cnt)] for cnt in contours])
     # test = np.array([[x, y, x + w, y + h] for [[x, y, w, h]] in rects])
@@ -46,6 +46,7 @@ while True:
 
     cv2.imshow('frame', contourImage)
     cv2.imshow('BGSub', frame)
+    cv2.imshow('Thresholded', dst)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
     time.sleep(0.1)

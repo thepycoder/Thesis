@@ -24,7 +24,7 @@ frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
 ## Create empty dict to dump detections into so we can evaluate the performance
 
-f = open("Groundtruth/resultsHog.csv", "w")
+f = open("Results/resultsHog.csv", "w")
 reader = csv.writer(f)
 frameNumber = 0
 

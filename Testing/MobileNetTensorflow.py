@@ -6,27 +6,27 @@ import cv2
 
 ## Define the model parameters
 
-prototxt = "MobileNetSSD_deploy.prototxt"
-model = "MobileNetSSD_deploy.caffemodel"
+pb = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Mobilenet/ssd_mobilenet_v1_coco_11_06_2017/frozen_inference_graph.pb"
+pbtxt = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Mobilenet/ssd_mobilenet_v1_coco_2017_11_17/ssd_mobilenet_v1_coco_opencv.pbtxt"
 conf = 0.4
 
 
 ## Set source file parameters and prepare the VideoCapture
 
-filename = "TestSeq1.mp4"
+# filename = "TestSeq1.mp4"
 
 # folder = "../Footage"
-folder = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage"
+folder = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:08:16.887.mp4"
 
 cap = cv2.VideoCapture()
-vid = cap.open("%s/%s" % (folder, filename))
+vid = cap.open(folder)
 frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
 
 ## Load the serialized model from disk
 
 print("[INFO] loading model...")
-net = cv2.dnn.readNetFromCaffe(prototxt, model)
+net = cv2.dnn.readNetFromTensorflow(pb, pbtxt)
 
 
 ## Start the timekeeping to calculate model speed
@@ -36,8 +36,6 @@ start = time.time()
 
 ## Create empty dict to dump detections into so we can evaluate the performance
 
-f = open("Results/results.csv", "w")
-reader = csv.writer(f)
 frameNumber = 0
 
 
@@ -78,9 +76,6 @@ while True:
             cv2.rectangle(frame, (startX, startY), (endX, endY), (0, 255, 0), 2)
             y = startY - 15 if startY - 15 > 15 else startY + 15
             cv2.putText(frame, label, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-
-            # add the detection to the csv file
-            reader.writerow([frameNumber, startX, startY, endX, endY])
 
     # Display the resulting frame
     cv2.line(frame, (0, 360), (1280, 360), (0, 0, 0), 2)
