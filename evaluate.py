@@ -3,8 +3,8 @@ import csv
 import cv2
 
 
-groundtruth = open("Groundtruth/gt.csv")
-detections = open("Groundtruth/results.csv")
+groundtruth = open("Results/gt.csv")
+detections = open("Results/results.csv")
 
 gt = csv.reader(groundtruth)
 det = csv.reader(detections)

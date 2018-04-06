@@ -36,7 +36,7 @@ start = time.time()
 
 ## Create empty dict to dump detections into so we can evaluate the performance
 
-f = open("Groundtruth/results.csv", "w")
+f = open("Results/results.csv", "w")
 reader = csv.writer(f)
 frameNumber = 0
 

@@ -3,10 +3,10 @@ import csv
 from pprint import pprint
 
 
-f = open("Groundtruth/TestSeq1.json").read()
+f = open("Results/TestSeq1.json").read()
 data = json.loads(f)
 
-f = open("Groundtruth/gt.csv", "w")
+f = open("Results/gt.csv", "w")
 reader = csv.writer(f)
 
 pprint(data)

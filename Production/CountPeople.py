@@ -124,8 +124,6 @@ class CountPeople:
 
             alltime = framecaptime + detectiontime + bboxdrawtime + trackingtime + tracksdrawtime + displaytime
 
-            endloop = time.time()
-
         end = time.time()
 
         # When everything done, release the capture and print speed
@@ -135,18 +133,20 @@ class CountPeople:
             print("[INFO] clip has %s frames" % framecount)
             print("[INFO] that makes %s fps" % (framecount / (end - start)))
 
-            print("frame capture: ", framecaptime, round((framecaptime/alltime)*100))
-            print("detection: ", detectiontime, round((detectiontime/alltime)*100))
-            print("tracking: ", trackingtime, round((trackingtime/alltime)*100))
-            print("visuals: ", displaytime + bboxdrawtime + tracksdrawtime,
+            print("[SPEED] frame capture: ", framecaptime, round((framecaptime/alltime)*100))
+            print("[SPEED] detection: ", detectiontime, round((detectiontime/alltime)*100))
+            print("[SPEED] tracking: ", trackingtime, round((trackingtime/alltime)*100))
+            print("[SPEED] visuals: ", displaytime + bboxdrawtime + tracksdrawtime,
                   round(((displaytime + bboxdrawtime + tracksdrawtime)/alltime)*100))
 
         cap.release()
         cv2.destroyAllWindows()
 
+        return [UP, DOWN, (framecount / (end - start))]
+
 
 if __name__ == '__main__':
-    vid = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips2/00:21:04.004.mp4"
+    vid = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:08:45.578.mp4"
 
     hog = HogDetector.HogDetector()
     net = MobileNetDetector.MobileNetDetector(prototxt="../CNNs/MobileNetSSD_deploy.prototxt",
@@ -155,4 +155,5 @@ if __name__ == '__main__':
     haar = HaarCascadeDetector.HaarCascadeDetector()
     iou = IouTracker.IouTracker(treshold=0.3)
     det = CountPeople(net, iou, 500)
-    det.countInVideo(vid, showVideo=True)
+    result = det.countInVideo(vid, showVideo=True)
+    print("[RESULT] ", result)
