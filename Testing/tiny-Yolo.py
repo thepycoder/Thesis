@@ -6,27 +6,23 @@ import cv2
 
 ## Define the model parameters
 
-pb = "/home/victor/Projects/Thesis/CNNs/ssd_mobilenet_v1_coco.pb"
-pbtxt = "/home/victor/Projects/Thesis/CNNs/ssd_mobilenet_v1_coco.pbtxt"
-conf = 0.4
+cfg = "/home/victor/Projects/Thesis/CNNs/yolov2-tiny.cfg"
+weights = "/home/victor/Projects/Thesis/CNNs/yolov2-tiny.weights"
 
 
 ## Set source file parameters and prepare the VideoCapture
 
-# filename = "TestSeq1.mp4"
-
-# folder = "../Footage"
-folder = "/home/victor/Projects/Footage/Clips1/00:00:30.442.mp4"
+filename = "/home/victor/Projects/Footage/Clips1/00:00:30.442.mp4"
 
 cap = cv2.VideoCapture()
-vid = cap.open(folder)
+cap.open(filename)
 frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
 
 ## Load the serialized model from disk
 
 print("[INFO] loading model...")
-net = cv2.dnn.readNetFromTensorflow(pb, pbtxt)
+net = cv2.dnn.readNetFromDarknet(cfg, weights)
 
 
 ## Start the timekeeping to calculate model speed
@@ -48,13 +44,31 @@ while True:
     (h, w) = frame.shape[:2]
 
     # Create a blob from the source frame by resizing to the required 300x300 size
-    blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)), 0.007843, (300, 300), 127.5)
+    blob = cv2.dnn.blobFromImage(cv2.resize(frame, (416, 416)), 1.0/255.0)
 
     # Feed blob to the net and perform a forward pass
     net.setInput(blob)
     detections = net.forward()
 
     print(detections)
+
+    for i in range(detections.shape[0]):
+        probability_index = 5
+        probability_size = detections.shape[1] - probability_index
+
+        objectClass = np.argmax(detections[i][probability_index:])
+        confidence = detections[i][probability_index + objectClass]
+
+        if confidence > 0.2:
+            x_center = detections[i][0] * w
+            y_center = detections[i][1] * h
+            width = detections[i][2] * w
+            height = detections[i][3] * h
+
+            p1 = (int(x_center - width / 2), int(y_center - height / 2))
+            p2 = (int(x_center + width / 2), int(y_center + height / 2))
+
+            cv2.rectangle(frame, p1, p2, (0, 255, 0), 2)
 
     # loop over the detections
     # for i in np.arange(0, detections.shape[2]):
@@ -73,9 +87,9 @@ while True:
     #         cv2.rectangle(frame, (startX, startY), (endX, endY), (0, 255, 0), 2)
     #         y = startY - 15 if startY - 15 > 15 else startY + 15
     #         cv2.putText(frame, label, (startX, y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
-
-    # Display the resulting frame
-    cv2.line(frame, (0, 360), (1280, 360), (0, 0, 0), 2)
+    #
+    # # Display the resulting frame
+    # cv2.line(frame, (0, 360), (1280, 360), (0, 0, 0), 2)
     cv2.imshow('frame', frame)
 
     # Wait for q key to be pressed to stop the program

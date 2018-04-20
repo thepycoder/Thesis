@@ -5,7 +5,7 @@ import sys
 # Instead of MIL, you can also use
 
 tracker_types = ['BOOSTING', 'MIL', 'KCF', 'TLD', 'MEDIANFLOW', 'GOTURN']
-tracker_type = tracker_types[4]
+tracker_type = tracker_types[2]
 
 if tracker_type == 'BOOSTING':
     tracker = cv2.TrackerBoosting_create()
@@ -20,10 +20,12 @@ if tracker_type == 'MEDIANFLOW':
 if tracker_type == 'GOTURN':
     tracker = cv2.TrackerGOTURN_create()
 
+
 # Read video
 # video = cv2.VideoCapture("../Footage/TestSeq1.mp4")
 
-video = cv2.VideoCapture("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq2.mp4")
+# video = cv2.VideoCapture("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq2.mp4")
+video = cv2.VideoCapture("/home/victor/Projects/Footage/Clips1/00:00:30.442.mp4")
 
 # Exit if video not opened.
 if not video.isOpened():
@@ -39,7 +41,7 @@ if not ok:
 # Define an initial bounding box
 bbox = (287, 23, 86, 320)
 
-for i in range(1, 150):
+for i in range(1, 30):
     ret, frame = video.read()
 
 # Uncomment the line below to select a different bounding box
@@ -63,7 +65,7 @@ while True:
 
     # Calculate Frames per second (FPS)
     fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer)
-    print(fps)
+    #print(fps)
 
     # Draw bounding box
     if ok:
@@ -76,10 +78,10 @@ while True:
         cv2.putText(frame, "Tracking failure detected", (100, 80), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (0, 0, 255), 2)
 
     # Display tracker type on frame
-    cv2.putText(frame, tracker_type + " Tracker", (100, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50, 170, 50), 2);
+    cv2.putText(frame, tracker_type + " Tracker", (100, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50, 170, 50), 2)
 
     # Display FPS on frame
-    cv2.putText(frame, "FPS : " + str(int(fps)), (100, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50, 170, 50), 2);
+    cv2.putText(frame, "FPS : " + str(int(fps)), (100, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.75, (50, 170, 50), 2)
 
     # Display result
     cv2.imshow("Tracking", frame)

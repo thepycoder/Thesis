@@ -18,7 +18,7 @@ detector = np.loadtxt("SVMs/50-50.dat")
 hog.setSVMDetector(detector)
 
 cap = cv2.VideoCapture()
-vid = cap.open("../Footage/TestSeq1.mp4")
+vid = cap.open("/home/victor/Projects/Footage/Clips1/00:00:30.442.mp4")
 # vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/TestSeq1.mp4")
 frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 

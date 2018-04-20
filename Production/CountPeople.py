@@ -1,5 +1,6 @@
 from Production import MobileNetDetector
 from Production import HaarCascadeDetector
+from Production import YoloDetector
 from Production import HogDetector
 from Production import IouTracker
 import cv2
@@ -146,14 +147,18 @@ class CountPeople:
 
 
 if __name__ == '__main__':
-    vid = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:08:45.578.mp4"
+    # vid = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:08:45.578.mp4"
+    vid = "/home/victor/Projects/Footage/Clips1/00:14:54.399.mp4"
 
     hog = HogDetector.HogDetector()
     net = MobileNetDetector.MobileNetDetector(prototxt="../CNNs/MobileNetSSD_deploy.prototxt",
                                               caffemodel="../CNNs/MobileNetSSD_deploy.caffemodel",
                                               conf=0.4)
+    yolo = YoloDetector.YoloDetector(cfg="/home/victor/Projects/Thesis/CNNs/yolov2-tiny.cfg",
+                                     weights="/home/victor/Projects/Thesis/CNNs/yolov2-tiny.weights",
+                                     conf=0.3)
     haar = HaarCascadeDetector.HaarCascadeDetector()
     iou = IouTracker.IouTracker(treshold=0.3)
-    det = CountPeople(net, iou, 500)
+    det = CountPeople(yolo, iou, 500)
     result = det.countInVideo(vid, showVideo=True)
     print("[RESULT] ", result)

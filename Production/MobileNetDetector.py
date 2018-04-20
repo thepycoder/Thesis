@@ -12,7 +12,8 @@ class MobileNetDetector:
 
     def detect(self, frame, height, width):
         # Create a blob from the source frame by resizing to the required 300x300 size
-        blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)), 0.007843, (300, 300), 127.5)
+        # blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)), 0.007843, (300, 300), 127.5)
+        blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)), 2.0 / 255.0, mean=127)
 
         # Feed blob to the net and perform a forward pass
         self.net.setInput(blob)
