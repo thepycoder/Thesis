@@ -153,7 +153,7 @@ class CountPeople:
 
 if __name__ == '__main__':
     # vid = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:08:45.578.mp4"
-    vid = "../Footage/Clips1/00:02:22.882.mp4"
+    vid = "../../Footage/Clips1/00:02:22.882.mp4"
 
     hog = HogDetector.HogDetector()
     net = MobileNetDetector.MobileNetDetector(prototxt="Models/MobileNetSSD_deploy.prototxt",
