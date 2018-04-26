@@ -6,8 +6,8 @@ import cv2
 
 ## Define the model parameters
 
-pb = "/home/victor/Projects/Thesis/CNNs/ssd_mobilenet_v1_coco.pb"
-pbtxt = "/home/victor/Projects/Thesis/CNNs/ssd_mobilenet_v1_coco.pbtxt"
+pb = "/home/victor/Projects/Thesis/Models/ssd_mobilenet_v1_coco.pb"
+pbtxt = "/home/victor/Projects/Thesis/Models/ssd_mobilenet_v1_coco.pbtxt"
 conf = 0.4
 
 

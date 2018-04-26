@@ -6,8 +6,8 @@ import cv2
 
 ## Define the model parameters
 
-cfg = "/home/victor/Projects/Thesis/CNNs/yolov2-tiny.cfg"
-weights = "/home/victor/Projects/Thesis/CNNs/yolov2-tiny.weights"
+cfg = "/home/victor/Projects/Thesis/Models/yolov2-tiny.cfg"
+weights = "/home/victor/Projects/Thesis/Models/yolov2-tiny.weights"
 
 
 ## Set source file parameters and prepare the VideoCapture

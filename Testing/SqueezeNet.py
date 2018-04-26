@@ -6,8 +6,8 @@ import cv2
 
 ## Define the model parameters
 
-prototxt = "/home/victor/Projects/Thesis/CNNs/SqueezeNet.prototxt"
-model = "/home/victor/Projects/Thesis/CNNs/squeezenet_v1.1.caffemodel"
+prototxt = "/home/victor/Projects/Thesis/Models/SqueezeNet.prototxt"
+model = "/home/victor/Projects/Thesis/Models/squeezenet_v1.1.caffemodel"
 conf = 0.4
 
 

@@ -20,8 +20,8 @@ class CountPeople:
         cap = cv2.VideoCapture()
         cap.open(videoPath)
         framecount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        # width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        # height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         framenumber = 0
 
         UP = 0
@@ -49,6 +49,11 @@ class CountPeople:
 
             if not ret:
                 break
+
+            # Crop the image for the neural nets
+            height, width = frame.shape[:2]
+            frame = frame[200:height, 200:width]
+            height, width = frame.shape[:2]
 
             boxes = self.det.detect(frame, height, width)
 
@@ -148,17 +153,17 @@ class CountPeople:
 
 if __name__ == '__main__':
     # vid = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:08:45.578.mp4"
-    vid = "/home/victor/Projects/Footage/Clips1/00:00:30.442.mp4"
+    vid = "../Footage/Clips1/00:02:22.882.mp4"
 
     hog = HogDetector.HogDetector()
-    net = MobileNetDetector.MobileNetDetector(prototxt="../CNNs/MobileNetSSD_deploy.prototxt",
-                                              caffemodel="../CNNs/MobileNetSSD_deploy.caffemodel",
+    net = MobileNetDetector.MobileNetDetector(prototxt="Models/MobileNetSSD_deploy.prototxt",
+                                              caffemodel="Models/MobileNetSSD_deploy.caffemodel",
                                               conf=0.4)
-    yolo = YoloDetector.YoloDetector(cfg="/home/victor/Projects/Thesis/CNNs/yolov2-tiny.cfg",
-                                     weights="/home/victor/Projects/Thesis/CNNs/yolov2-tiny.weights",
+    yolo = YoloDetector.YoloDetector(cfg="Models/yolov2-tiny.cfg",
+                                     weights="Models/yolov2-tiny.weights",
                                      conf=0.3)
-    haar = HaarCascadeDetector.HaarCascadeDetector()
+    haar = HaarCascadeDetector.HaarCascadeDetector(classifierfile="Models/haarcascade_upperbody.xml")
     iou = IouTracker.IouTracker(treshold=0.3)
-    det = CountPeople(yolo, iou, 500)
+    det = CountPeople(haar, iou, 440)
     result = det.countInVideo(vid, showVideo=True)
     print("[RESULT] ", result)

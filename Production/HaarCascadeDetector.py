@@ -11,6 +11,9 @@ class HaarCascadeDetector:
         self.scale = scale
         self.haar = cv2.CascadeClassifier(classifierfile)
 
+    def getName(self):
+        return "Haar"
+
     def detect(self, frame, height, width):
         # (ho, wo) = frame.shape[:2]
         # originalFrame = frame

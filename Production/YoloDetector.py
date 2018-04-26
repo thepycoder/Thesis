@@ -3,11 +3,14 @@ import cv2
 
 class YoloDetector:
     def __init__(self,
-                 cfg = "yolov2-tiny.cfg",
-                 weights = "yolov2-tiny.weights",
+                 cfg = "Models/yolov2-tiny.cfg",
+                 weights = "Models/yolov2-tiny.weights",
                  conf = 0.4):
         self.net = cv2.dnn.readNetFromDarknet(cfg, weights)
         self.conf = conf
+
+    def getName(self):
+        return "Yolo"
 
     def detect(self, frame, height, width):
         # Create a blob from the source frame by resizing to the required 300x300 size
@@ -27,7 +30,7 @@ class YoloDetector:
             objectClass = np.argmax(detections[i][probability_index:])
             confidence = detections[i][probability_index + objectClass]
 
-            if confidence > 0.2:
+            if confidence > 0.2 and objectClass == 0:
                 x_center = detections[i][0] * width
                 y_center = detections[i][1] * height
                 width_det = detections[i][2] * width
