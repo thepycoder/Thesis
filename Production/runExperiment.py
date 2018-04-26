@@ -1,9 +1,9 @@
-from Production import MobileNetDetector
-from Production import HaarCascadeDetector
-from Production import YoloDetector
-from Production import HogDetector
-from Production import IouTracker
-from Production import CountPeople
+import MobileNetDetector
+import HaarCascadeDetector
+import YoloDetector
+import HogDetector
+import IouTracker
+import CountPeople
 import os
 import csv
 
@@ -12,6 +12,7 @@ def absoluteFilePaths(directory):
    for dirpath,_,filenames in os.walk(directory):
        for f in filenames:
            yield os.path.abspath(os.path.join(dirpath, f))
+
 
 # clipfolder = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/"
 clipfolder = "../Footage/Clips1"

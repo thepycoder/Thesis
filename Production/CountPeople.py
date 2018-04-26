@@ -1,8 +1,8 @@
-from Production import MobileNetDetector
-from Production import HaarCascadeDetector
-from Production import YoloDetector
-from Production import HogDetector
-from Production import IouTracker
+import MobileNetDetector
+import HaarCascadeDetector
+import YoloDetector
+import HogDetector
+import IouTracker
 import cv2
 import copy
 import time
