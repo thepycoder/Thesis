@@ -1,12 +1,12 @@
 import pandas as pd
 import os
 
-gt = pd.read_csv('Groundtruth/Groundtruth.csv')
+gt = pd.read_csv('../Groundtruth/Groundtruth.csv')
 cols = [col for col in gt.columns if 'UP' in col or 'DOWN' in col]
 results = gt.groupby('Difficulty')[cols].sum()
 
-for filename in os.listdir('Results'):
-    data = pd.read_csv('Results/' + filename)
+for filename in os.listdir('../Results'):
+    data = pd.read_csv('../Results/' + filename)
     df = pd.merge(gt, data, on='File', suffixes=('_GT', '_' + filename))
     cols = [col for col in df.columns if 'UP' in col or 'DOWN' in col]
     print('Average fps ' + filename, df['FPS'].mean())

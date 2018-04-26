@@ -4,8 +4,8 @@ import cv2
 
 class MobileNetDetector:
     def __init__(self,
-                 prototxt = "Models/MobileNetSSD_deploy.prototxt",
-                 caffemodel = "Models/MobileNetSSD_deploy.caffemodel",
+                 prototxt = "../Models/MobileNetSSD_deploy.prototxt",
+                 caffemodel = "../Models/MobileNetSSD_deploy.caffemodel",
                  conf = 0.4):
         self.net = cv2.dnn.readNetFromCaffe(prototxt, caffemodel)
         self.conf = conf

@@ -3,8 +3,8 @@ import cv2
 
 class YoloDetector:
     def __init__(self,
-                 cfg = "Models/yolov2-tiny.cfg",
-                 weights = "Models/yolov2-tiny.weights",
+                 cfg = "../Models/yolov2-tiny.cfg",
+                 weights = "../Models/yolov2-tiny.weights",
                  conf = 0.4):
         self.net = cv2.dnn.readNetFromDarknet(cfg, weights)
         self.conf = conf

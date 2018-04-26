@@ -6,6 +6,7 @@ import IouTracker
 import cv2
 import copy
 import time
+import os
 
 
 class CountPeople:
@@ -153,16 +154,17 @@ class CountPeople:
 
 if __name__ == '__main__':
     # vid = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:08:45.578.mp4"
+    print(os.listdir("../../Footage"))
     vid = "../../Footage/Clips1/00:02:22.882.mp4"
 
     hog = HogDetector.HogDetector()
-    net = MobileNetDetector.MobileNetDetector(prototxt="Models/MobileNetSSD_deploy.prototxt",
-                                              caffemodel="Models/MobileNetSSD_deploy.caffemodel",
+    net = MobileNetDetector.MobileNetDetector(prototxt="../Models/MobileNetSSD_deploy.prototxt",
+                                              caffemodel="../Models/MobileNetSSD_deploy.caffemodel",
                                               conf=0.4)
-    yolo = YoloDetector.YoloDetector(cfg="Models/yolov2-tiny.cfg",
-                                     weights="Models/yolov2-tiny.weights",
+    yolo = YoloDetector.YoloDetector(cfg="../Models/yolov2-tiny.cfg",
+                                     weights="../Models/yolov2-tiny.weights",
                                      conf=0.3)
-    haar = HaarCascadeDetector.HaarCascadeDetector(classifierfile="Models/haarcascade_upperbody.xml")
+    haar = HaarCascadeDetector.HaarCascadeDetector(classifierfile="../Models/haarcascade_upperbody.xml")
     iou = IouTracker.IouTracker(treshold=0.3)
     det = CountPeople(haar, iou, 440)
     result = det.countInVideo(vid, showVideo=True)
