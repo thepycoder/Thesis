@@ -10,7 +10,8 @@ class HogDetector:
         self.padding = padding
         self.scale = scale
         self.hog = cv2.HOGDescriptor()
-        self.hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+        # self.hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+        self.hog.setSVMDetector(np.loadtxt("../SVMs/50-50.dat"))
 
     def detect(self, frame, height, width):
         # (ho, wo) = frame.shape[:2]
