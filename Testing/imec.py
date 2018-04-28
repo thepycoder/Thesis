@@ -3,7 +3,7 @@ import math
 import numpy as np
 import csv
 
-cap = cv2.VideoCapture("../Footage/TestSeq1.mp4")
+cap = cv2.VideoCapture("../../Footage/Clips1/00:08:45.578.mp4")
 
 frameNumber = 0
 
@@ -16,7 +16,8 @@ frames = []
 for iM in range(MEDframes):
     #cap.set(cv2.CV_CAP_PROP_POS_FRAMES, iM * frameSkip)
     ret, frame = cap.read()
-    frame = cv2.resize(frame, (0, 0), fx=0.3, fy=0.3)
+    height, width = frame.shape[:2]
+    frame = cv2.resize(frame, (int(width/3), int(height/3)))
     # gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     frames.append(frame)
 median = np.median(frames, axis=0).astype(dtype=np.uint8)
@@ -30,7 +31,7 @@ median = np.median(frames, axis=0).astype(dtype=np.uint8)
 
 cv2.imshow('median frame', median)
 # cv2.imshow('CLAHE median frame', clahe_median)
-gbg = cv2.BackgroundSubtractorMOG()
+gbg = cv2.createBackgroundSubtractorMOG2()
 gbg.apply(median, learningRate=0.001)
 
 kernel2 = np.ones((11, 11), np.uint8)
@@ -51,7 +52,8 @@ voertuigZwaarDOWN = 0
 while cap.isOpened():
     frameNumber = frameNumber + 1
     ret, frame = cap.read()
-    frame = cv2.resize(frame, (0, 0), fx=0.3, fy=0.3)
+    height, width = frame.shape[:2]
+    frame = cv2.resize(frame, (int(width / 3), int(height / 3)))
     # micro-controller op 8bit
     fgGBG = gbg.apply(frame, learningRate=0.001)
     # bg = gbg.???
@@ -69,9 +71,9 @@ while cap.isOpened():
         difFrameB = np.zeros((heightSlice, width, 3), dtype=np.uint8)
         difFrameV = np.zeros((heightSlice, width, 3), dtype=np.uint8)
 
-        oldf = median[height / 4 * 3, :]
-        oldfB = median[height / 4 * 3 - 5, :]
-        oldfV = median[height / 4 * 3 + 5, :]
+        oldf = median[int(height / 4 * 3), ]
+        oldfB = median[int(height / 4 * 3 - 5), ]
+        oldfV = median[int(height / 4 * 3 + 5), ]
         blackline2 = 1
 
     if frameNumber <= heightSlice:

@@ -1,4 +1,5 @@
 import pandas as pd
+import plotly
 import os
 
 gt = pd.read_csv('../Groundtruth/Groundtruth.csv')
@@ -17,5 +18,6 @@ for filename in os.listdir('../Results'):
 
 cols = [col for col in results.columns if 'RESULT' in col]
 print(results)
+print("============")
 print(results[cols])
 
