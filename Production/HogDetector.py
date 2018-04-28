@@ -1,16 +1,21 @@
-from Production import Utils
+import Utils
 from imutils import resize
 import numpy as np
 import cv2
 
 
 class HogDetector:
-    def __init__(self, winstride=(4, 4), padding=(8, 8), scale=1.05):
+    def __init__(self, winstride=(4, 4), padding=(8, 8), scale=1.05, name="hog", svmdetector=cv2.HOGDescriptor_getDefaultPeopleDetector()):
         self.winstride = winstride
         self.padding = padding
         self.scale = scale
+        self.name = name
         self.hog = cv2.HOGDescriptor()
-        self.hog.setSVMDetector(cv2.HOGDescriptor_getDefaultPeopleDetector())
+        self.hog.setSVMDetector(svmdetector)
+        # self.hog.setSVMDetector(np.loadtxt("../SVMs/50-50.dat"))
+
+    def getName(self):
+        return self.name
 
     def detect(self, frame, height, width):
         # (ho, wo) = frame.shape[:2]
@@ -22,7 +27,7 @@ class HogDetector:
         widthScale = width / wr
         heightScale = height / hr
 
-        (rects, weights) = self.hog.detectMultiScale(frame, winStride=(4, 4), padding=(8, 8), scale=1.05)
+        (rects, weights) = self.hog.detectMultiScale(frame, winStride=self.winstride, padding=self.padding, scale=self.scale)
 
         # apply non-maxima suppression to the bounding boxes using a
         # fairly large overlap threshold to try to maintain overlapping

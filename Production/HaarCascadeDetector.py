@@ -1,15 +1,19 @@
-from Production import Utils
+import Utils
 from imutils import resize
 import numpy as np
 import cv2
 
 
 class HaarCascadeDetector:
-    def __init__(self, winstride=(4, 4), padding=(8, 8), scale=1.05, classifierfile='haarcascade_upperbody.xml'):
+    def __init__(self, winstride=(4, 4), padding=(8, 8), scale=1.05, classifierfile='haarcascade_upperbody.xml', name='haar'):
         self.winstride = winstride
         self.padding = padding
         self.scale = scale
         self.haar = cv2.CascadeClassifier(classifierfile)
+        self.name = name
+
+    def getName(self):
+        return self.name
 
     def detect(self, frame, height, width):
         # (ho, wo) = frame.shape[:2]

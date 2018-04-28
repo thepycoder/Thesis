@@ -1,35 +1,33 @@
-from Production import MobileNetDetector
-from Production import HaarCascadeDetector
-from Production import HogDetector
-from Production import IouTracker
+import MobileNetDetector
+import HaarCascadeDetector
+import YoloDetector
+import HogDetector
+import IouTracker
 import cv2
 import copy
 import time
+import os
 
 
 class CountPeople:
-    def __init__(self, detector, tracker=None, countingline=400):
+    def __init__(self, detector, tracker=None, countingline=400, crop=200):
         self.det = detector
         self.tracker = tracker
         self.countingline = countingline
         self.tracklengthtreshold = 3
         self.detections = []
+        self.crop = crop
 
     def countInVideo(self, videoPath, showVideo = True, showSpeed = True):
         cap = cv2.VideoCapture()
         cap.open(videoPath)
         framecount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-        width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
-        height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
+        # width = int(cap.get(cv2.CAP_PROP_FRAME_WIDTH))
+        # height = int(cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
         framenumber = 0
 
         UP = 0
         DOWN = 0
-
-
-        # Added this to adjust for the bounding boxes
-        width -= 200
-        height -= 200
 
 
         framecaptime = 0
@@ -49,14 +47,17 @@ class CountPeople:
             # Capture frame-by-frame
             ret, frame = cap.read()
 
-            # And added this to crop the frame which has a good effect on mobilenet accuracy
-            oframe = frame
-            frame = frame[300:, 200:]
-
             framecap = time.time()
 
             if not ret:
                 break
+
+            # Crop the image for the neural nets
+            if self.crop > 0:
+                height, width = frame.shape[:2]
+                frame = frame[self.crop:height, self.crop:width]
+
+            height, width = frame.shape[:2]
 
             boxes = self.det.detect(frame, height, width)
 
@@ -116,8 +117,6 @@ class CountPeople:
             # Display the resulting frame
             if showVideo:
                 cv2.imshow('frame', frame)
-                cv2.imshow('oframe', oframe)
-                cv2.imshow('resized', cv2.resize(frame, (300, 300)))
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
 
@@ -157,14 +156,21 @@ class CountPeople:
 
 
 if __name__ == '__main__':
-    vid = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:08:51.004.mp4"
+    # vid = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:08:45.578.mp4"
+    # print(os.listdir("../../Footage/Clips1"))
+    vid = "../../Footage/Clips1/00:02:22.882.mp4"
+    # vid = "E:\\Thesis_Victor_Sonck\\Footage\\Clips1\\00:02:22.882.mp4"
 
     hog = HogDetector.HogDetector()
-    net = MobileNetDetector.MobileNetDetector(prototxt="../CNNs/MobileNetSSD_deploy.prototxt",
-                                              caffemodel="../CNNs/MobileNetSSD_deploy.caffemodel",
+    # hog_fast = HogDetector.HogDetector(winstride=(8, 8), padding=(8, 8), scale=1, name='hog_fast')
+    net = MobileNetDetector.MobileNetDetector(prototxt="../Models/MobileNetSSD_deploy.prototxt",
+                                              caffemodel="../Models/MobileNetSSD_deploy.caffemodel",
                                               conf=0.4)
-    haar = HaarCascadeDetector.HaarCascadeDetector()
+    yolo = YoloDetector.YoloDetector(cfg="../Models/yolov2-tiny.cfg",
+                                     weights="../Models/yolov2-tiny.weights",
+                                     conf=0.3)
+    haar = HaarCascadeDetector.HaarCascadeDetector(classifierfile="../Models/haarcascade_upperbody.xml")
     iou = IouTracker.IouTracker(treshold=0.3)
-    det = CountPeople(net, iou, 500)
+    det = CountPeople(hog_fast, iou, 440)
     result = det.countInVideo(vid, showVideo=True)
     print("[RESULT] ", result)
