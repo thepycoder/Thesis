@@ -6,12 +6,15 @@ class MobileNetDetector:
     def __init__(self,
                  prototxt = "MobileNetSSD_deploy.prototxt",
                  caffemodel = "MobileNetSSD_deploy.caffemodel",
-                 conf = 0.4):
+                 conf = 0.5):
         self.net = cv2.dnn.readNetFromCaffe(prototxt, caffemodel)
         self.conf = conf
 
     def detect(self, frame, height, width):
         # Create a blob from the source frame by resizing to the required 300x300 size
+        # blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)), 0.007843, (300, 300), 127.5)
+
+        # The crop is fine but it still messes with the boxes being drawn
         blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)), 0.007843, (300, 300), 127.5)
 
         # Feed blob to the net and perform a forward pass

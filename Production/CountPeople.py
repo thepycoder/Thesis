@@ -27,6 +27,11 @@ class CountPeople:
         DOWN = 0
 
 
+        # Added this to adjust for the bounding boxes
+        width -= 200
+        height -= 200
+
+
         framecaptime = 0
         detectiontime = 0
         bboxdrawtime = 0
@@ -43,6 +48,10 @@ class CountPeople:
 
             # Capture frame-by-frame
             ret, frame = cap.read()
+
+            # And added this to crop the frame which has a good effect on mobilenet accuracy
+            oframe = frame
+            frame = frame[300:, 200:]
 
             framecap = time.time()
 
@@ -107,6 +116,8 @@ class CountPeople:
             # Display the resulting frame
             if showVideo:
                 cv2.imshow('frame', frame)
+                cv2.imshow('oframe', oframe)
+                cv2.imshow('resized', cv2.resize(frame, (300, 300)))
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
 
@@ -146,7 +157,7 @@ class CountPeople:
 
 
 if __name__ == '__main__':
-    vid = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:08:45.578.mp4"
+    vid = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:08:51.004.mp4"
 
     hog = HogDetector.HogDetector()
     net = MobileNetDetector.MobileNetDetector(prototxt="../CNNs/MobileNetSSD_deploy.prototxt",

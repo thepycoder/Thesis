@@ -6,7 +6,7 @@ import cv2
 
 cap = cv2.VideoCapture()
 # cap = cv2.VideoCapture('../Footage/TestSeq2.mp4')
-vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:08:16.887.mp4")
+vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:19:27.559.mp4")
 
 frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 fgbg = cv2.createBackgroundSubtractorMOG2(varThreshold=50, detectShadows=True)

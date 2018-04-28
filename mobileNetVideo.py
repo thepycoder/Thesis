@@ -6,20 +6,17 @@ import cv2
 
 ## Define the model parameters
 
-prototxt = "MobileNetSSD_deploy.prototxt"
-model = "MobileNetSSD_deploy.caffemodel"
+prototxt = "CNNs/MobileNetSSD_deploy.prototxt"
+model = "CNNs/MobileNetSSD_deploy.caffemodel"
 conf = 0.4
 
 
 ## Set source file parameters and prepare the VideoCapture
 
-filename = "TestSeq1.mp4"
-
-# folder = "../Footage"
-folder = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage"
+filename = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:13:57.166.mp4"
 
 cap = cv2.VideoCapture()
-vid = cap.open("%s/%s" % (folder, filename))
+vid = cap.open(filename)
 frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 
 
@@ -85,6 +82,7 @@ while True:
     # Display the resulting frame
     cv2.line(frame, (0, 360), (1280, 360), (0, 0, 0), 2)
     cv2.imshow('frame', frame)
+    cv2.imshow('blob', cv2.dnn.imagesFromblob(blob))
 
     # Wait for q key to be pressed to stop the program
     if cv2.waitKey(1) & 0xFF == ord('q'):

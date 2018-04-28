@@ -16,7 +16,7 @@ conf = 0.4
 # filename = "TestSeq1.mp4"
 
 # folder = "../Footage"
-folder = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:08:16.887.mp4"
+folder = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:13:57.166.mp4"
 
 cap = cv2.VideoCapture()
 vid = cap.open(folder)
@@ -53,7 +53,7 @@ while True:
     (h, w) = frame.shape[:2]
 
     # Create a blob from the source frame by resizing to the required 300x300 size
-    blob = cv2.dnn.blobFromImage(cv2.resize(frame, (300, 300)), 0.007843, (300, 300), 127.5)
+    blob = cv2.dnn.blobFromImage(frame, 0.001, (300, 300), 127.5)
 
     # Feed blob to the net and perform a forward pass
     net.setInput(blob)
