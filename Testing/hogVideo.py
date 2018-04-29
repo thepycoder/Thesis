@@ -14,7 +14,7 @@ hog = cv2.HOGDescriptor()
 # sv = svm.getSupportVectors()
 
 # detector = np.vstack(sv[0])
-detector = np.loadtxt("SVMs/50-50.dat")
+detector = np.loadtxt("../SVMs/50-50.dat")
 hog.setSVMDetector(detector)
 
 cap = cv2.VideoCapture()

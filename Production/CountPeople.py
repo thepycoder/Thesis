@@ -3,6 +3,7 @@ import HaarCascadeDetector
 import YoloDetector
 import HogDetector
 import IouTracker
+import numpy as np
 import cv2
 import copy
 import time
@@ -156,12 +157,13 @@ class CountPeople:
 
 
 if __name__ == '__main__':
-    # vid = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:08:45.578.mp4"
+    vid = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:12:19.952.mp4"
     # print(os.listdir("../../Footage/Clips1"))
-    vid = "../../Footage/Clips1/00:02:22.882.mp4"
+    # vid = "../../Footage/Clips1/00:02:22.882.mp4"
     # vid = "E:\\Thesis_Victor_Sonck\\Footage\\Clips1\\00:02:22.882.mp4"
 
     hog = HogDetector.HogDetector()
+    hog_50 = HogDetector.HogDetector(name='hog_50', svmdetector=np.loadtxt("../SVMs/svmlight_norm.dat"))
     # hog_fast = HogDetector.HogDetector(winstride=(8, 8), padding=(8, 8), scale=1, name='hog_fast')
     net = MobileNetDetector.MobileNetDetector(prototxt="../Models/MobileNetSSD_deploy.prototxt",
                                               caffemodel="../Models/MobileNetSSD_deploy.caffemodel",
@@ -171,6 +173,6 @@ if __name__ == '__main__':
                                      conf=0.3)
     haar = HaarCascadeDetector.HaarCascadeDetector(classifierfile="../Models/haarcascade_upperbody.xml")
     iou = IouTracker.IouTracker(treshold=0.3)
-    det = CountPeople(hog_fast, iou, 440)
+    det = CountPeople(hog_50, iou, 440)
     result = det.countInVideo(vid, showVideo=True)
     print("[RESULT] ", result)

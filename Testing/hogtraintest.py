@@ -1,5 +1,5 @@
 import cv2
-import glob
+import random
 import os
 import numpy as np
 
@@ -11,10 +11,12 @@ labels = []
 # positive_path = "/home/victor/Projects/COCO/trainPOS/"
 # negative_path = "/home/victor/Projects/COCO/trainNEG/"
 
-# positive_path = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/INRIA/Testing/pos/"
-# negative_path = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/INRIA/Testing/neg/"
-positive_path = "/home/victor/Projects/INRIAPerson/NEWTRAINING/pos/"
-negative_path = "/home/victor/Projects/INRIAPerson/NEWTRAINING/neg/"
+positive_path = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/INRIA/Testing/pos/"
+negative_path = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/INRIA/Testing/neg/"
+# positive_path = "/home/victor/Projects/INRIAPerson/NEWTRAINING/pos/"
+# negative_path = "/home/victor/Projects/INRIAPerson/NEWTRAINING/neg/"
+
+random.seed(42)
 
 print("Processing positive samples")
 # Get positive samples
@@ -26,7 +28,7 @@ for filename in os.listdir(positive_path):
 
 print("Processing negative samples")
 # Get negative samples
-for filename in os.listdir(negative_path):
+for filename in random.sample(os.listdir(negative_path), 1000):
     img = cv2.imread(negative_path + filename, 1)
     hist = hog.compute(img)
     samples.append(hist)
@@ -38,10 +40,10 @@ labels = np.array(labels)
 
 
 # Shuffle Samples
-rand = np.random.RandomState(321)
-shuffle = rand.permutation(len(samples))
-samples = samples[shuffle]
-labels = labels[shuffle]
+# rand = np.random.RandomState(321)
+# shuffle = rand.permutation(len(samples))
+# samples = samples[shuffle]
+# labels = labels[shuffle]
 
 print("Training the classifier")
 # Create SVM classifier
@@ -57,7 +59,13 @@ svm.setC(0.5)
 # svm.setClassWeights(None)
 
 # Train
-# svm.trainAuto(samples, cv2.ml.ROW_SAMPLE, labels)
-svm.train(samples, cv2.ml.ROW_SAMPLE, labels)
-svm.save('ALL.dat')
+svm.trainAuto(samples, cv2.ml.ROW_SAMPLE, labels)
+# svm.train(samples, cv2.ml.ROW_SAMPLE, labels)
+
+f = open('../SVMs/inria_random_auto.dat', 'w')
+for value in svm.getSupportVectors()[0]:
+    f.write('%s ' % value)
+f.close()
+
+# svm.save('../SVMs/inria.dat')
 print("Done!")
