@@ -163,7 +163,7 @@ if __name__ == '__main__':
     # vid = "E:\\Thesis_Victor_Sonck\\Footage\\Clips1\\00:02:22.882.mp4"
 
     hog = HogDetector.HogDetector()
-    hog_50 = HogDetector.HogDetector(name='hog_50', svmdetector=np.loadtxt("/home/victor/Projects/trainHOG/genfiles/descriptorvector.dat"))
+    # hog_50 = HogDetector.HogDetector(name='hog_50', svmdetector=np.loadtxt("/home/victor/Projects/trainHOG/genfiles/descriptorvector.dat"))
     # hog_fast = HogDetector.HogDetector(winstride=(8, 8), padding=(8, 8), scale=1, name='hog_fast')
     net = MobileNetDetector.MobileNetDetector(prototxt="../Models/MobileNetSSD_deploy.prototxt",
                                               caffemodel="../Models/MobileNetSSD_deploy.caffemodel",
