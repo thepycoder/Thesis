@@ -14,11 +14,12 @@ from sklearn.externals import joblib
 # positive_path = "/home/victor/Projects/COCO/trainPOS/"
 # negative_path = "/home/victor/Projects/COCO/trainNEG/"
 
-positive_path = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/INRIA/Testing/pos/"
-negative_path = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/INRIA/Testing/neg/"
-hard_negative_path = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/INRIA/Testing/hardnegatives/"
-# positive_path = "/home/victor/Projects/INRIAPerson/NEWTRAINING/pos/"
-# negative_path = "/home/victor/Projects/INRIAPerson/NEWTRAINING/neg/"
+# positive_path = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/INRIA/Testing/pos/"
+# negative_path = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/INRIA/Testing/neg/"
+# hard_negative_path = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/INRIA/Testing/hardnegatives/"
+positive_path = "/home/victor/Projects/INRIAPerson/NEWTRAINING/pos/"
+negative_path = "/home/victor/Projects/INRIAPerson/NEWTRAINING/allneg/"
+hard_negative_path = "/home/victor/Projects/INRIAPerson/NEWTRAINING/hardnegatives/"
 
 random.seed(42)
 
@@ -61,10 +62,10 @@ def train_hog(samples, labels):
     labels = labels[shuffle]
 
     print("Training the classifier")
-    clf = LinearSVC()
+    clf = LinearSVC(class_weight='balanced')
     clf.fit(samples, labels)
 
-    f = open('../SVMs/svmlight_norm.dat', 'w')
+    f = open('../SVMs/svmlight_no_hardneg.dat', 'w')
     for value in clf.coef_[0]:
         f.write('%s ' % value)
     f.close()
@@ -108,7 +109,7 @@ def hardnegmining(hard_negative_path, samples, labels, clf):
     # Hard negative mining
     print("Starting hard negative mining")
 
-    detector = HogDetector.HogDetector(name='hog', svmdetector=np.loadtxt("../SVMs/svmlight_norm.dat"))
+    detector = HogDetector.HogDetector(name='hog', svmdetector=np.loadtxt("../SVMs/svmlight_no_hardneg.dat"))
 
     for filename in os.listdir(hard_negative_path):
         print(filename)
@@ -122,8 +123,9 @@ def hardnegmining(hard_negative_path, samples, labels, clf):
                 hist = [list(itertools.chain.from_iterable(hog.compute(window)))]
                 classification = clf.predict(hist)
                 if classification == 1:
-                    hardneg_samples.append(hist[0])
-                    hardneg_labels.append(0)
+                    # hardneg_samples.append(hist[0])
+                    # hardneg_labels.append(0)
+                    cv2.imwrite("/home/victor/Projects/INRIAPerson/NEWTRAINING/hardnegcrops/" + str(int(x)) + str(int(y)) + filename, window)
 
     return hardneg_samples, hardneg_labels
 
@@ -131,8 +133,8 @@ def hardnegmining(hard_negative_path, samples, labels, clf):
 print("Started!")
 samples, labels = prepare_samples(positive_path, negative_path)
 clf = train_hog(samples, labels)
-hardneg_samples, hardneg_labels = hardnegmining(hard_negative_path, samples, labels, clf)
-final_samples = samples + hardneg_samples
-final_labels = labels + hardneg_labels
-final_clf = train_hog(final_samples, final_labels)
+# hardneg_samples, hardneg_labels = hardnegmining(hard_negative_path, samples, labels, clf)
+# final_samples = samples + hardneg_samples
+# final_labels = labels + hardneg_labels
+# final_clf = train_hog(final_samples, final_labels)
 print("Done!")
