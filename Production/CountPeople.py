@@ -173,6 +173,6 @@ if __name__ == '__main__':
                                      conf=0.3)
     haar = HaarCascadeDetector.HaarCascadeDetector(classifierfile="../Models/haarcascade_upperbody.xml")
     iou = IouTracker.IouTracker(treshold=0.3)
-    det = CountPeople(hog_50, iou, 440)
-    result = det.countInVideo(vid, showVideo=True)
+    det = CountPeople(net, iou, 440)
+    result = det.countInVideo(vid, showVideo=False)
     print("[RESULT] ", result)
