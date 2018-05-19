@@ -6,13 +6,14 @@ import cv2
 
 ## Define the model parameters
 
-cfg = "/home/victor/Projects/Thesis/Models/yolov2-tiny.cfg"
-weights = "/home/victor/Projects/Thesis/Models/yolov2-tiny.weights"
+cfg = "../Models/yolov3-tiny.cfg"
+weights = "../Models/yolov3-tiny.weights"
 
 
 ## Set source file parameters and prepare the VideoCapture
 
-filename = "/home/victor/Projects/Footage/Clips1/00:00:30.442.mp4"
+# filename = "/home/victor/Projects/Footage/Clips1/00:00:30.442.mp4"
+filename = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:00:30.442.mp4"
 
 cap = cv2.VideoCapture()
 cap.open(filename)

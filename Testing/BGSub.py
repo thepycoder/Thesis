@@ -1,20 +1,21 @@
-from imutils.object_detection import non_max_suppression
-import numpy as np
+import bgsubcnt
 import time
 import cv2
 
 
 cap = cv2.VideoCapture()
 # cap = cv2.VideoCapture('../Footage/TestSeq2.mp4')
-# vid = cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:08:16.887.mp4")
-vid = "../../Footage/Clips1/00:02:22.882.mp4"
-cap.open(vid)
+cap.open("/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:08:16.887.mp4")
+# vid = "../../Footage/Clips1/00:02:22.882.mp4"
+# cap.open(vid)
 
 frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
-fgbg = cv2.createBackgroundSubtractorMOG2(varThreshold=50, detectShadows=True)
+# fgbg = cv2.createBackgroundSubtractorMOG2(varThreshold=5, detectShadows=True)
 sizeThreshold = 10000
 
-#fgbg = cv2.bgsegm.createBackgroundSubtractorMOG()
+fgbg = cv2.createBackgroundSubtractorKNN(detectShadows=True)
+# fgbg = cv2.bgsegm.createBackgroundSubtractorMOG()
+# fgbg = bgsubcnt.createBackgroundSubtractor()
 
 start = time.time()
 
@@ -24,8 +25,9 @@ while True:
     if not ret:
         break
 
-    frame = cv2.resize(frame, (640, 480))
+    frame = cv2.resize(frame, (300, 300))
     contourImage = frame.copy()
+    contourImage = cv2.cvtColor(contourImage, cv2.COLOR_BGR2GRAY)
 
     contourImage = fgbg.apply(contourImage)
 
@@ -51,7 +53,6 @@ while True:
     cv2.imshow('Thresholded', dst)
     if cv2.waitKey(1) & 0xFF == ord('q'):
         break
-    time.sleep(0.1)
 
 
 end = time.time()
