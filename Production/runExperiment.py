@@ -1,3 +1,4 @@
+import BackgroundSubtractionDetector
 from multiprocessing.dummy import Pool as ThreadPool
 import MobileNetDetector
 import HaarCascadeDetector
@@ -22,6 +23,7 @@ pool = ThreadPool(8)
 
 # clipfolder = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/"
 clipfolder = "../../Footage/Clips1"
+analysisfolder = "RaspberryPi"
 
 hog = HogDetector.HogDetector(name='hog')
 hog_50 = HogDetector.HogDetector(name='hog_50', svmdetector=np.loadtxt("../SVMs/50-50.dat"))
@@ -38,15 +40,16 @@ yolo = YoloDetector.YoloDetector(cfg="../Models/yolov2-tiny.cfg",
 squeeze = SqueezeNetDetector.SqueezeNetDetector(prototxt="../Models/SqueezeNetSSD.prototxt",
                                               caffemodel="../Models/SqueezeNetSSD.caffemodel",
                                               conf=0.2)
+bgsub = BackgroundSubtractionDetector.BackgroundSubtractionDetector()
 iou = IouTracker.IouTracker(treshold=0.3)
 
-detectors = [net, yolo, squeeze]
+detectors = [hog, haar_upper, bgsub, net, yolo, squeeze]
 
 files = sorted(absoluteFilePaths(clipfolder), key=os.path.getsize)
 
 for detector in detectors:
 # def processDetector(detector):
-    f = open("../Results/%s.csv" % detector.getName(), "w+")
+    f = open("../Analysis/%s/%s.csv" % (analysisfolder, detector.getName()), "w+")
     reader = csv.writer(f, delimiter=',')
     reader.writerow(['File', 'UP', 'DOWN', 'FPS'])
 
