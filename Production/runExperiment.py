@@ -25,6 +25,9 @@ pool = ThreadPool(8)
 clipfolder = "../../Footage/Clips1"
 analysisfolder = "RaspberryPi"
 
+if not os.path.exists("../Analysis/" + analysisfolder):
+    os.makedirs("../Analysis/" + analysisfolder)
+
 hog = HogDetector.HogDetector(name='hog')
 hog_50 = HogDetector.HogDetector(name='hog_50', svmdetector=np.loadtxt("../SVMs/50-50.dat"))
 # hog_ALL = HogDetector.HogDetector(name='hog_ALL', svmdetector=np.loadtxt("../SVMs/ALL.dat"))
