@@ -1,4 +1,5 @@
 import MobileNetDetector
+import SqueezeNetDetector
 import HaarCascadeDetector
 import YoloDetector
 import HogDetector
@@ -168,11 +169,17 @@ if __name__ == '__main__':
     net = MobileNetDetector.MobileNetDetector(prototxt="../Models/MobileNetSSD_deploy.prototxt",
                                               caffemodel="../Models/MobileNetSSD_deploy.caffemodel",
                                               conf=0.4)
+    squeeze = SqueezeNetDetector.SqueezeNetDetector(prototxt="../Models/SqueezeNetSSD.prototxt",
+                                              caffemodel="../Models/SqueezeNetSSD.caffemodel",
+                                              conf=0.2)
     yolo = YoloDetector.YoloDetector(cfg="../Models/yolov2-tiny.cfg",
                                      weights="../Models/yolov2-tiny.weights",
                                      conf=0.3)
+    # yolov3 = YoloDetector.YoloDetector(cfg="../Models/yolov3-tiny.cfg",
+    #                                  weights="../Models/yolov3-tiny.weights",
+    #                                  conf=0.3)
     haar = HaarCascadeDetector.HaarCascadeDetector(classifierfile="../Models/haarcascade_upperbody.xml")
     iou = IouTracker.IouTracker(treshold=0.3)
-    det = CountPeople(net, iou, 440)
-    result = det.countInVideo(vid, showVideo=False)
+    det = CountPeople(squeeze, iou, 440)
+    result = det.countInVideo(vid, showVideo=True)
     print("[RESULT] ", result)

@@ -1,6 +1,7 @@
 from multiprocessing.dummy import Pool as ThreadPool
 import MobileNetDetector
 import HaarCascadeDetector
+import SqueezeNetDetector
 import YoloDetector
 import HogDetector
 import numpy as np
@@ -28,15 +29,18 @@ hog_50 = HogDetector.HogDetector(name='hog_50', svmdetector=np.loadtxt("../SVMs/
 hog_scaled = HogDetector.HogDetector(name='hog_scaled')
 net = MobileNetDetector.MobileNetDetector(prototxt="../Models/MobileNetSSD_deploy.prototxt",
                                               caffemodel="../Models/MobileNetSSD_deploy.caffemodel",
-                                              conf=0.4)
+                                              conf=0.2)
 haar_upper = HaarCascadeDetector.HaarCascadeDetector(classifierfile="../Models/haarcascade_upperbody.xml", name='haar_upper')
 haar_full = HaarCascadeDetector.HaarCascadeDetector(classifierfile="../Models/haarcascade_fullbody.xml", name='haar_full')
 yolo = YoloDetector.YoloDetector(cfg="../Models/yolov2-tiny.cfg",
                                      weights="../Models/yolov2-tiny.weights",
-                                     conf=0.3)
+                                     conf=0.2)
+squeeze = SqueezeNetDetector.SqueezeNetDetector(prototxt="../Models/SqueezeNetSSD.prototxt",
+                                              caffemodel="../Models/SqueezeNetSSD.caffemodel",
+                                              conf=0.2)
 iou = IouTracker.IouTracker(treshold=0.3)
 
-detectors = [hog_50]
+detectors = [net, yolo, squeeze]
 
 files = sorted(absoluteFilePaths(clipfolder), key=os.path.getsize)
 

@@ -3,9 +3,9 @@ import time
 import cv2
 
 
-prototxt = "SqueezeNetSSD.prototxt"
-model = "SqueezeNetSSD.caffemodel"
-image = "Testimages/test16.jpg"
+prototxt = "../Models/SqueezeNetSSD.prototxt"
+model = "../Models/SqueezeNetSSD.caffemodel"
+image = "../Testimages/test16.jpg"
 conf = 0.01
 
 
