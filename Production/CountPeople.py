@@ -1,3 +1,4 @@
+import BackgroundSubtractionDetector
 import MobileNetDetector
 import SqueezeNetDetector
 import HaarCascadeDetector
@@ -178,8 +179,9 @@ if __name__ == '__main__':
     # yolov3 = YoloDetector.YoloDetector(cfg="../Models/yolov3-tiny.cfg",
     #                                  weights="../Models/yolov3-tiny.weights",
     #                                  conf=0.3)
+    bgsub = BackgroundSubtractionDetector.BackgroundSubtractionDetector()
     haar = HaarCascadeDetector.HaarCascadeDetector(classifierfile="../Models/haarcascade_upperbody.xml")
     iou = IouTracker.IouTracker(treshold=0.3)
-    det = CountPeople(squeeze, iou, 440)
+    det = CountPeople(bgsub, iou, 440)
     result = det.countInVideo(vid, showVideo=True)
     print("[RESULT] ", result)

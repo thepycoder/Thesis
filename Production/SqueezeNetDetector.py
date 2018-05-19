@@ -30,7 +30,6 @@ class SqueezeNetDetector:
             # extract the confidence (i.e., probability) associated with the prediction
             confidence = detections[0, 0, i, 2]
             classindex = int(detections[0, 0, i, 1])
-            print(classindex)
 
             # filter out weak detections by ensuring the `confidence` is greater than the minimum confidence
             # Also suppress any output that is not a person

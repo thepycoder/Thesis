@@ -1,3 +1,5 @@
+import numpy as np
+
 class IouTracker:
     def __init__(self, treshold=0.5):
         self.tracks_active = []
@@ -16,7 +18,7 @@ class IouTracker:
                     # print("track updated")
                     track.append(bestmatch)
                     updated_tracks.append(track)
-                    del newDetections[newDetections.index(bestmatch)]
+                    del newDetections[[np.array_equal(bestmatch,x) for x in newDetections].index(True)]
 
             if len(updated_tracks) == 0 or track is not updated_tracks[-1]:
                 if len(track) >= self.mintracklength:
