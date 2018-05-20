@@ -15,6 +15,7 @@ vid = cap.open("/home/victor/Projects/Footage/Clips1/00:01:43.464.mp4")
 fps = 24
 
 frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+print(frameCount)
 # use ffmpeg -i filename to get framerate
 
 i = 0

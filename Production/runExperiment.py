@@ -22,8 +22,8 @@ def absoluteFilePaths(directory):
 pool = ThreadPool(8)
 
 # clipfolder = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/"
-clipfolder = "../../Footage/Clips1"
-analysisfolder = "RaspberryPi"
+clipfolder = "../../Footage/Experiment"
+analysisfolder = "Desktop"
 
 if not os.path.exists("../Analysis/" + analysisfolder):
     os.makedirs("../Analysis/" + analysisfolder)

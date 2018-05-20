@@ -13,15 +13,18 @@ import os
 
 
 class CountPeople:
-    def __init__(self, detector, tracker=None, countingline=400, crop=200):
+    def __init__(self, detector, tracker=None, countingline=400, crop=200, fps=30):
         self.det = detector
         self.tracker = tracker
         self.countingline = countingline
         self.tracklengthtreshold = 3
         self.detections = []
         self.crop = crop
+        self .fpsMod = round(30/fps)
 
     def countInVideo(self, videoPath, showVideo = True, showSpeed = True):
+        i = 0
+
         cap = cv2.VideoCapture()
         cap.open(videoPath)
         framecount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
@@ -54,6 +57,11 @@ class CountPeople:
 
             if not ret:
                 break
+
+            if i % self.fpsMod != 0:
+                i += 1
+                continue
+            i += 1
 
             # Crop the image for the neural nets
             if self.crop > 0:
@@ -182,6 +190,6 @@ if __name__ == '__main__':
     bgsub = BackgroundSubtractionDetector.BackgroundSubtractionDetector()
     haar = HaarCascadeDetector.HaarCascadeDetector(classifierfile="../Models/haarcascade_upperbody.xml")
     iou = IouTracker.IouTracker(treshold=0.3)
-    det = CountPeople(bgsub, iou, 440)
+    det = CountPeople(net, iou, 440, fps=2)
     result = det.countInVideo(vid, showVideo=True)
     print("[RESULT] ", result)
