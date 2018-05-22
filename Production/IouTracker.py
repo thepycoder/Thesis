@@ -4,8 +4,12 @@ class IouTracker:
     def __init__(self, treshold=0.5):
         self.tracks_active = []
         self.tracks_finished = []
-        self.mintracklength = 5
+        self.mintracklength = 2
         self.threshold = treshold
+
+    def resetTracks(self):
+        self.tracks_finished = []
+        self.tracks_active = []
 
     def track(self, newDetections, countingline):
         updated_tracks = []

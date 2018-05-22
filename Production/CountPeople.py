@@ -13,7 +13,7 @@ import os
 
 
 class CountPeople:
-    def __init__(self, detector, tracker=None, countingline=400, crop=200, fps=30):
+    def __init__(self, detector, tracker=None, countingline=400, crop=200, fps=30.0):
         self.det = detector
         self.tracker = tracker
         self.countingline = countingline
@@ -23,6 +23,7 @@ class CountPeople:
         self .fpsMod = round(30/fps)
 
     def countInVideo(self, videoPath, showVideo = True, showSpeed = True):
+        self.tracker.resetTracks()
         i = 0
 
         cap = cv2.VideoCapture()
@@ -127,6 +128,7 @@ class CountPeople:
 
             # Display the resulting frame
             if showVideo:
+                cv2.imwrite("../../Footage/fps/" + str(framenumber) + ".jpg", frame)
                 cv2.imshow('frame', frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
@@ -169,7 +171,7 @@ class CountPeople:
 if __name__ == '__main__':
     # vid = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/00:12:19.952.mp4"
     # print(os.listdir("../../Footage/Clips1"))
-    vid = "../../Footage/Clips1/00:02:22.882.mp4"
+    vid = "../../Footage/Clips1/00:08:16.887.mp4"
     # vid = "E:\\Thesis_Victor_Sonck\\Footage\\Clips1\\00:02:22.882.mp4"
 
     hog = HogDetector.HogDetector()
@@ -177,19 +179,19 @@ if __name__ == '__main__':
     # hog_fast = HogDetector.HogDetector(winstride=(8, 8), padding=(8, 8), scale=1, name='hog_fast')
     net = MobileNetDetector.MobileNetDetector(prototxt="../Models/MobileNetSSD_deploy.prototxt",
                                               caffemodel="../Models/MobileNetSSD_deploy.caffemodel",
-                                              conf=0.4)
+                                              conf=0.2)
     squeeze = SqueezeNetDetector.SqueezeNetDetector(prototxt="../Models/SqueezeNetSSD.prototxt",
                                               caffemodel="../Models/SqueezeNetSSD.caffemodel",
                                               conf=0.2)
     yolo = YoloDetector.YoloDetector(cfg="../Models/yolov2-tiny.cfg",
                                      weights="../Models/yolov2-tiny.weights",
-                                     conf=0.3)
+                                     conf=0.2)
     # yolov3 = YoloDetector.YoloDetector(cfg="../Models/yolov3-tiny.cfg",
     #                                  weights="../Models/yolov3-tiny.weights",
     #                                  conf=0.3)
     bgsub = BackgroundSubtractionDetector.BackgroundSubtractionDetector()
     haar = HaarCascadeDetector.HaarCascadeDetector(classifierfile="../Models/haarcascade_upperbody.xml")
     iou = IouTracker.IouTracker(treshold=0.3)
-    det = CountPeople(net, iou, 440, fps=2)
+    det = CountPeople(squeeze, iou, 440, fps=4)
     result = det.countInVideo(vid, showVideo=True)
     print("[RESULT] ", result)

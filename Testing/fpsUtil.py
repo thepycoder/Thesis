@@ -24,7 +24,7 @@ fourcc = cv2.VideoWriter_fourcc(*'MJPG')
 # output filename, videowriter object, framse per second of out and dimensions of out
 # out = cv2.VideoWriter('../Footage/TestSeq8.mp4', fourcc, 24.0, (1280, 720))
 out = cv2.VideoWriter('/home/victor/Projects/Footage/fps/TestSeqFPS.mp4',
-                      fourcc, 24, (1920, 1080))
+                      fourcc, 30, (1920, 1080))
 
 while cap.isOpened():
     # Capture frame-by-frame
