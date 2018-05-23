@@ -130,6 +130,7 @@ class CountPeople:
             if showVideo:
                 cv2.imwrite("../../Footage/fps/" + str(framenumber) + ".jpg", frame)
                 cv2.imshow('frame', frame)
+                cv2.moveWindow('frame', 50,50)
                 if cv2.waitKey(1) & 0xFF == ord('q'):
                     break
 

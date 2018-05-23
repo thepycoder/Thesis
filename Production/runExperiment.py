@@ -47,8 +47,8 @@ bgsub = BackgroundSubtractionDetector.BackgroundSubtractionDetector()
 iou = IouTracker.IouTracker(treshold=0.3)
 
 # detectors = [bgsub, haar_upper, hog, squeeze, net, yolo]
-detectors = [net]
-fps = [4]
+detectors = [bgsub]
+fps = [23]
 # fps = [30.0, 30.0, 25.0, 30.0, 26.0, 24.0]
 # fps = [23.0, 15.5, 5.5, 5, 4, 3]
 # fps = [6, 5, 1.5, 1.25, 1, 0.5]
