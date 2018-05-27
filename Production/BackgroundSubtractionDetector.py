@@ -17,6 +17,7 @@ class BackgroundSubtractionDetector:
         # originalFrame = frame
 
         frame = resize(frame, width=min(400, frame.shape[1]))
+        # frame = cv2.resize(frame, (300, 300))
         (hr, wr) = frame.shape[:2]
 
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -29,18 +30,6 @@ class BackgroundSubtractionDetector:
         th, dst = cv2.threshold(contourImage, 127, 255, cv2.THRESH_BINARY)
 
         _, contours, hierarchy = cv2.findContours(dst, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
-
-        rects = []
-
-        # for cnt in contours:
-        #     x, y, w, h = cv2.boundingRect(cnt)
-        #     box = [x, y, w, h]
-        #     if w*h > 250:
-        #         rects.append(box)
-        #
-        # rects = np.array([[x, y, x + w, y + h] * np.array([widthScale, heightScale, widthScale, heightScale])
-        #                   for (x, y, w, h) in rects])
-        # boxes = Utils.non_max_suppression_fast(rects, overlapThresh=0.65)
 
         rects = []
 

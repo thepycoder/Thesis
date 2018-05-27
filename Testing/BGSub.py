@@ -10,9 +10,9 @@ cap.open(vid)
 
 frameCount = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
 # fgbg = cv2.createBackgroundSubtractorMOG2(varThreshold=5, detectShadows=True)
-sizeThreshold = 10000
+sizeThreshold = 100
 
-fgbg = cv2.createBackgroundSubtractorKNN(detectShadows=True)
+fgbg = cv2.createBackgroundSubtractorKNN(history=10000, dist2Threshold=1400.0, detectShadows=True)
 # fgbg = cv2.bgsegm.createBackgroundSubtractorMOG()
 # fgbg = bgsubcnt.createBackgroundSubtractor()
 

@@ -23,7 +23,7 @@ def absoluteFilePaths(directory):
 
 # clipfolder = "/media/victor/57a90e07-058d-429d-a357-e755d0820324/Footage/Clips1/"
 clipfolder = "../../Footage/Clips1"
-analysisfolder = "Visual Test"
+analysisfolder = "FPS"
 
 if not os.path.exists("../Analysis/" + analysisfolder):
     os.makedirs("../Analysis/" + analysisfolder)
@@ -47,27 +47,29 @@ bgsub = BackgroundSubtractionDetector.BackgroundSubtractionDetector()
 iou = IouTracker.IouTracker(treshold=0.3)
 
 # detectors = [bgsub, haar_upper, hog, squeeze, net, yolo]
-detectors = [bgsub]
-fps = [23]
+detectors = [haar_upper, hog, squeeze, yolo]
+fps = [25, 20, 15, 10, 5, 4, 3, 2, 1, 0.5, 0.25, 0.1]
 # fps = [30.0, 30.0, 25.0, 30.0, 26.0, 24.0]
 # fps = [23.0, 15.5, 5.5, 5, 4, 3]
 # fps = [6, 5, 1.5, 1.25, 1, 0.5]
 
 files = sorted(absoluteFilePaths(clipfolder), key=os.path.getsize)
 
-for i in range(len(detectors)):
-# def processDetector(detector):
-    f = open("../Analysis/%s/%s.csv" % (analysisfolder, detectors[i].getName()), "w+")
-    reader = csv.writer(f, delimiter=',')
-    reader.writerow(['File', 'UP', 'DOWN', 'FPS'])
+for j in range(len(fps)):
+    for i in range(len(detectors)):
+    # def processDetector(detector):
+        f = open("../Analysis/%s/%s_%s.csv" % (analysisfolder, detectors[i].getName(), fps[j]), "w+")
+        reader = csv.writer(f, delimiter=',')
+        reader.writerow(['File', 'UP', 'DOWN', 'FPS'])
 
-    index = 1
-    for vid in files:
-        # print(vid.split('/')[-1])
-        det = CountPeople.CountPeople(detectors[i], iou, 440, fps=fps[i])
-        result = det.countInVideo(vid, showVideo=True, showSpeed=False)
-        # print(type(result[2]))
-        reader.writerow([vid.split('/')[-1], result[0], result[1], result[2]])
-        # print("[RESULT] ", vid.split('/')[-1], result)
-        print("[PROGRESS] ", detectors[i].getName(), index)
-        index += 1
+        index = 1
+        for vid in files:
+            # print(vid.split('/')[-1])
+            # det = CountPeople.CountPeople(detectors[i], iou, 440, fps=fps[i])
+            det = CountPeople.CountPeople(detectors[i], iou, 440, fps=fps[j])
+            result = det.countInVideo(vid, showVideo=False, showSpeed=False)
+            # print(type(result[2]))
+            reader.writerow([vid.split('/')[-1], result[0], result[1], result[2]])
+            # print("[RESULT] ", vid.split('/')[-1], result)
+            print("[PROGRESS] ", detectors[i].getName(), index)
+            index += 1

@@ -5,7 +5,7 @@ import os
 desired_width = 320
 pd.set_option('display.width', desired_width)
 
-foldername = "Desktop_trackerfix"
+foldername = "FPS"
 
 gt = pd.read_csv('../Groundtruth/Groundtruth.csv')
 cols = [col for col in gt.columns if 'UP' in col or 'DOWN' in col]

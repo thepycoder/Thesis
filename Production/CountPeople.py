@@ -193,6 +193,6 @@ if __name__ == '__main__':
     bgsub = BackgroundSubtractionDetector.BackgroundSubtractionDetector()
     haar = HaarCascadeDetector.HaarCascadeDetector(classifierfile="../Models/haarcascade_upperbody.xml")
     iou = IouTracker.IouTracker(treshold=0.3)
-    det = CountPeople(squeeze, iou, 440, fps=4)
+    det = CountPeople(bgsub, iou, 440, fps=5)
     result = det.countInVideo(vid, showVideo=True)
     print("[RESULT] ", result)
